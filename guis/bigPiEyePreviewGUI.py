@@ -3,36 +3,40 @@ import json
 import time
 import imageio
 import traceback
-import numpy as np
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtCore import QMutex
 
-from utils import make_big_x, try_url
+from utils import make_x_image, try_url
 from guis.workers import WorkerSignals
+from guis.progressDialog import progressDialog
 from guis.basicGUI import basicGUI, ClickableIMG
-from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, pyqtSlot, QThreadPool
+from PyQt5.QtCore import QRunnable, pyqtSlot
 
 
 class bigPiEyePreviewWorker(QRunnable):
     """
     Worker for getting a preview of the actual image (full resolution)
     This can be used for checking the focus of the camera.
+
+    This is implemented as a worker thread so all the previews can load seperately and do not wait for eachother.
     """
 
-    def __init__(self, address):
+    def __init__(self, camera_name):
         super(bigPiEyePreviewWorker, self).__init__()
 
-        # Store constructor arguments (re-used for processing)
-        self.address = address
+        self.camera_name = (
+            camera_name  # name / address of the camera, ie 'pieye-dragonfly.local'
+        )
         self.signals = WorkerSignals()
-        self.still_running = True
+        self.still_running = True  # used to stop the worker when the window is closed
 
     @pyqtSlot()
     def run(self):
         """
-        Initialise the runner function with passed args, kwargs.
+        Initialise the runner function
         """
         while self.still_running:
-            time.sleep(0.1)
+            time.sleep(0.05)
             # Retrieve args/kwargs here; and fire processing using them
             try:
                 result = self.getPreview()
@@ -51,22 +55,34 @@ class bigPiEyePreviewWorker(QRunnable):
         self.signals.finished.emit()
 
     def getPreview(self):
-        take_img_url = f"http://{self.address}:8080/takeAndCacheImage"
+        """getPreview
+        Query the PiEye API to take and cache an image,
+        then request that image and display it
+
+        Returns:
+            data: a numpy array of the image.
+        """
+        # Tell the Pi-Eye to take and cache a new image
+        take_img_url = f"http://{self.camera_name}:8080/takeAndCacheImage"
         response = try_url(take_img_url)
 
+        # Check if it did not work - return None
         if response is None:
             return None
 
+        # Otherwise take the returned image name and tell the API to
+        #   get the cached image
         cached_img_name = json.loads(response.content)["image_name"]
-
         get_cached_img_url = (
-            f"http://{self.address}:8080/getCachedImage/{cached_img_name}"
+            f"http://{self.camera_name}:8080/getCachedImage/{cached_img_name}"
         )
         response = try_url(get_cached_img_url)
 
+        # Check if it did not work - return None
         if response is None:
             return None
 
+        # If everything went well, return a numpy array of the image
         data = imageio.imread(response.content)
         return data
 
@@ -77,20 +93,22 @@ class bigPiEyePreviewGUI(basicGUI):
     Although the update is slow, as it asks the Pi-Eye to capture a full-resolution image each time.
     """
 
-    def __init__(self, address, worker):
+    def __init__(self, camera_name, worker):
         super().__init__()
-        self.address = address
+
+        self.camera_name = camera_name
         self.worker = worker  # used to exit the worker when the window closes
-        self.setWindowTitle(address)
+        self.setWindowTitle(camera_name)
 
-        self.big_x = make_big_x(320, 240)
+        # If for some reason cannot connect to the camera, show an image of an X instead
+        self.x = make_x_image(width=320, height=240)
 
-        self.img = ClickableIMG(self)
+        self.img = QtWidgets.QLabel(self)
         self.img.setMaximumSize(4056, 3040)
 
         layout = QtWidgets.QVBoxLayout()
         self.label = QtWidgets.QLabel(
-            "Write some text here... what is happening.? Maybe a cute progress bar?"
+            "Below is a *almost* full resolution image from the pi-eye. Can be used for fine adjustments to focus. This does take about 10 seconds to update between images, so please be patient"
         )
         layout.addWidget(self.label)
         layout.addWidget(self.img)
@@ -101,7 +119,9 @@ class bigPiEyePreviewGUI(basicGUI):
         Closes the window and exits the worker.
         Automatically triggered when the window is closed. (built in part of PyQt)
         """
-        self.log.info(f"Telling big pi-eye ({self.address}) preview worker to close")
+        self.log.info(
+            f"Telling big pi-eye ({self.camera_name}) preview worker to close"
+        )
         self.worker.close()
         event.accept()
 

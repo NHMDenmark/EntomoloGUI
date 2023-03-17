@@ -1,16 +1,19 @@
 import sys
 import logging
-import requests
 import warnings
-import subprocess
 
-from serial import Serial
-from guis import captureThread
-from serial.tools import list_ports
 from PyQt5 import QtGui, QtWidgets, QtCore
 
 
 class ClickableIMG(QtWidgets.QLabel):
+    """ClickableIMG
+    Makes a container for an image that can do something when clicked.
+    This can be connected with something like: object.clicked.connect(event)
+
+    Args:
+        QtWidgets (_type_): _description_
+    """
+
     clicked = QtCore.pyqtSignal(str)
 
     def mousePressEvent(self, event):
@@ -18,6 +21,11 @@ class ClickableIMG(QtWidgets.QLabel):
 
 
 class basicGUI(QtWidgets.QWidget):
+    """basicGUI
+    Adds some basic functionality on top of the normal Widget
+    such as logging and a warning popup
+    """
+
     def __init__(self):
         super(basicGUI, self).__init__()
         self.grid = QtWidgets.QGridLayout()
@@ -25,32 +33,27 @@ class basicGUI(QtWidgets.QWidget):
         self.log = logging.getLogger("UThread")
 
     def headerLabel(self, text):
+        """headerLabel
+        generate a new headerlabel with specific font
+
+        Args:
+            text (str): header text
+
+        Returns:
+            headerLabel: the header label object
+        """
         headerLabel = QtWidgets.QLabel(text)
         headerFont = QtGui.QFont("Times", 20, QtGui.QFont.Bold)
         headerLabel.setFont(headerFont)
         return headerLabel
 
-    def commandLine(self, args):
-        assert isinstance(args, list)
-        print("Sent command: " + " ".join(args))
-        # if args[0] == "gphoto2":
-        #    captureThread.captureThread.pause()
-
-        try:
-            output = subprocess.check_output(args)
-            print(output)
-            if args[0] == "gphoto2":
-                pass  # captureThread.captureThread.resume()
-            return output
-        except Exception as ex:
-            print(ex)
-            # self.warn('Command %s failed. Exception: %s'%(' '.join(args), ex))
-            if args[0] == "gphoto2":
-                pass
-                # captureThread.captureThread.resume()
-            return ex
-
     def warn(self, msg, _exit=False):
+        """warn
+
+        Args:
+            msg (str): Message to be displayed explaining the warning
+            _exit (bool, optional): Whether to exit the entire application or not after this warning is closed. Defaults to False.
+        """
         warnings.warn(msg)
         warning = QtWidgets.QMessageBox()
         warning.setWindowTitle("Warning Encountered")

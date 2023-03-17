@@ -15,7 +15,7 @@ from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, pyqtSlot, QThreadPool
 from guis.workers import previewWorker
 from guis.basicGUI import basicGUI, ClickableIMG
 from guis.progressDialog import progressDialog
-from utils import make_big_x
+from utils import make_x_image
 
 
 class canonGUI(basicGUI):
@@ -58,8 +58,6 @@ class canonGUI(basicGUI):
         self.threadpool.start(self.preview_worker)
 
     def updatePreview(self, img):
-        if isinstance(img, int):
-            wtf
         if img is None:
             img = self.big_x
 
@@ -81,14 +79,19 @@ class canonGUI(basicGUI):
 
             port_info_list = gp.PortInfoList()
             port_info_list.load()
+
             abilities_list = gp.CameraAbilitiesList()
             abilities_list.load()
+
             # context = gp.Context()
             cam = gp.check_result(gp.gp_camera_new())
+
             idx = port_info_list.lookup_path(port)
             cam.set_port_info(port_info_list[idx])
+
             idx = abilities_list.lookup_model(model)
             cam.set_abilities(abilities_list[idx])
+
             OK = gp.gp_camera_init(cam)
             if OK >= gp.GP_OK:
                 cam_owner = self.getOwner(cam)
@@ -135,7 +138,9 @@ class canonGUI(basicGUI):
                 name.folder, name.name, gp.GP_FILE_TYPE_NORMAL
             )
             self.taking_photo = False
-            camera_file.save(target.as_posix())
+            camera_file.save(
+                target.as_posix()
+            )  # CR: Check: can wrap in str() so works on windows
             return True
         else:
             return None

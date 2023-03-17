@@ -78,7 +78,6 @@ class takePhotosGUI(basicGUI):
         pi_eyes = self.parent().piEyedPiper.getCameras()
         self.cameras = canons + pi_eyes
 
-        i = 0
         self.results = {}
         self.finished = {}
         self.workers = {}
@@ -88,6 +87,9 @@ class takePhotosGUI(basicGUI):
             worker = takeSinglePhotoWorker(camera)
             worker.signals.result.connect(self.setStatusFinished)
             self.threadpool.start(worker)
+
+        # CR: Kim to check how to do this waiting for all responses.
+        i = 0
         while True:
             sleep(0.1)
             # print("self.finished", self.finished)
@@ -107,7 +109,16 @@ class takePhotosGUI(basicGUI):
                 break
 
         self.progress._close()
-        self.savePhotos(self.results)
+
+        if self.all_finished or self.debug:
+            self.savePhotos(self.results)
+
+        if not self.all_finished:
+            # Play failure sound
+            failed_addresses = [k for k, v in self.results.items() if v == None]
+            self.warn(
+                "Warning! The following cameras failed to take photos:, files not saved"
+            )
 
     def savePhotos(self, filenames):
 

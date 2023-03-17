@@ -6,7 +6,7 @@ import numpy as np
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QRunnable, pyqtSlot, QThreadPool
 
-from utils import try_url, make_big_x
+from utils import try_url, make_x_image
 from guis.workers import WorkerSignals, previewWorker
 from guis.basicGUI import basicGUI, ClickableIMG
 from guis.bigPiEyePreviewGUI import bigPiEyePreviewGUI, bigPiEyePreviewWorker
@@ -33,14 +33,14 @@ class piEyeGUI(basicGUI):
         self.address = address
 
         # Used to run the worker that updates the preview
-        self.threadpool = QThreadPool()
 
         self.taking_photo = False
 
         # If the camera disconnects, show a big x
-        self.big_x = make_big_x(320, 240)
+        self.big_x = make_x_image(320, 240)
 
         self.initUI()
+        self.threadpool = self.parent().parent().threadpool
         self.startPreviewWorker()
 
     def initUI(self):

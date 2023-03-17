@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import gphoto2 as gp
 
-from utils import try_url, make_big_x
+from utils import try_url, make_x_image
 from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, pyqtSlot, QThreadPool
 
 from PIL import Image
