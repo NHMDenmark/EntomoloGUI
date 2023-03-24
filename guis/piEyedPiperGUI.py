@@ -8,16 +8,18 @@ class piEyedPiperGUI(basicGUI):
     The GUI for the Pi-Eyes
     """
 
-    def __init__(self):
-        super(piEyedPiperGUI, self).__init__()
+    def __init__(self, **kwargs):
+        super(piEyedPiperGUI, self).__init__(**kwargs)
+        # Add beautiful header
         self.inst_title = self.headerLabel("Pi Eyed Piper")
         self.inst_desc = QtWidgets.QLabel("Previews of all pi-Eyes")
 
-        self.piEyeAnt = piEyeGUI("pieye-ant.local")
-        self.piEyeBeetle = piEyeGUI("pieye-beetle.local")
-        self.piEyeCicada = piEyeGUI("pieye-cicada.local")
-        self.piEyeDragonfly = piEyeGUI("pieye-dragonfly.local")
-        self.piEyeEarwig = piEyeGUI("pieye-earwig.local")
+        # Initialize each pi-eye
+        self.piEyeAnt = piEyeGUI("pieye-ant.local", **kwargs)
+        self.piEyeBeetle = piEyeGUI("pieye-beetle.local", **kwargs)
+        self.piEyeCicada = piEyeGUI("pieye-cicada.local", **kwargs)
+        self.piEyeDragonfly = piEyeGUI("pieye-dragonfly.local", **kwargs)
+        self.piEyeEarwig = piEyeGUI("pieye-earwig.local", **kwargs)
 
         self.initUI()
 
@@ -36,7 +38,7 @@ class piEyedPiperGUI(basicGUI):
         used by takePhotosGUI to get a list of all the cameras
 
         Returns:
-            cameras [list]: Cameras is a list of the five piEye
+            cameras (list): Cameras is a list of the five piEye
                 camera classes.
         """
         cameras = [

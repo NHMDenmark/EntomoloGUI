@@ -62,8 +62,7 @@ class previewWorker(QRunnable):
             sleep(0.05)
             # Retrieve args/kwargs here; and fire processing using them
             try:
-                if not self.gui.taking_photo:
-                    result = self.gui.getPreview()
+                result = self.gui.getPreview()
             except:
                 traceback.print_exc()
                 exctype, value = sys.exc_info()[:2]

@@ -29,6 +29,7 @@ class bigPiEyePreviewWorker(QRunnable):
         )
         self.signals = WorkerSignals()
         self.still_running = True  # used to stop the worker when the window is closed
+        self.mutex = QMutex()
 
     @pyqtSlot()
     def run(self):
@@ -51,7 +52,9 @@ class bigPiEyePreviewWorker(QRunnable):
         """close
         Stop the worker when the preview window is closed
         """
+        self.mutex.lock()
         self.still_running = False  # ends the loops/worker above
+        self.mutex.unlock()
         self.signals.finished.emit()
 
     def getPreview(self):
@@ -126,8 +129,14 @@ class bigPiEyePreviewGUI(basicGUI):
         event.accept()
 
     def updatePreview(self, img):
+        """updatePreview
+        Update the image displayed in the GUI with a new image
+
+        Args:
+            img (numpy array): new image. If None, a large X is displayed instead.
+        """
         if img is None:
-            qImg = self.big_x
+            qImg = self.x
         else:
             height, width, _ = img.shape
             bytesPerLine = 3 * width

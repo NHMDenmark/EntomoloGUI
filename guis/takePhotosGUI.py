@@ -20,9 +20,10 @@ class takePhotosGUI(basicGUI):
     GUI that controls taking photos and saving them
     """
 
-    def __init__(self, storage_path):
-        super(takePhotosGUI, self).__init__()
+    def __init__(self, storage_path, **kwargs):
+        super(takePhotosGUI, self).__init__(**kwargs)
 
+        # sounds used to verify if worked or not
         self.sounds = {
             "Success": QSound(
                 "EntomoloGUI/media/Success.wav"
@@ -33,7 +34,6 @@ class takePhotosGUI(basicGUI):
         }
 
         self.storage_path = Path(storage_path)
-        self.threadpool = QThreadPool()
         self.initUI()
 
     def initUI(self):
@@ -63,11 +63,12 @@ class takePhotosGUI(basicGUI):
               from the takePhoto function.
         """
         camera, result = camera_and_result
-        print("setting status finished", camera.address)
-        self.results[camera.address] = result
-        self.finished[camera.address] = True
+        print("setting status finished", camera.camera_name)
+        self.results[camera.camera_name] = result
+        self.finished[camera.camera_name] = True
 
     def takePhotos(self):
+        self.sounds["Success"].play()
         self.log.info("Got Command to Take Photos")
         self.progress = progressDialog()
         self.progress._open()
@@ -83,7 +84,7 @@ class takePhotosGUI(basicGUI):
         self.workers = {}
 
         for camera in self.cameras:
-            self.finished[camera.address] = False
+            self.finished[camera.camera_name] = False
             worker = takeSinglePhotoWorker(camera)
             worker.signals.result.connect(self.setStatusFinished)
             self.threadpool.start(worker)
@@ -111,11 +112,12 @@ class takePhotosGUI(basicGUI):
         self.progress._close()
 
         if self.all_finished or self.debug:
+            self.sounds["Success"].play()
             self.savePhotos(self.results)
 
         if not self.all_finished:
-            # Play failure sound
-            failed_addresses = [k for k, v in self.results.items() if v == None]
+            self.sounds["Failure"].play()
+            failed_names = [k for k, v in self.results.items() if v == None]
             self.warn(
                 "Warning! The following cameras failed to take photos:, files not saved"
             )
@@ -128,8 +130,8 @@ class takePhotosGUI(basicGUI):
         folder_path.mkdir(parents=True, exist_ok=False)
 
         for camera in self.cameras:
-            if filenames.get(camera.address, None) is not None:
-                camera.savePhoto(filenames[camera.address], folder_path)
+            if filenames.get(camera.camera_name, None) is not None:
+                camera.savePhoto(filenames[camera.camera_name], folder_path)
 
         print("Finished Saving photos")
 
@@ -163,7 +165,7 @@ class takeSinglePhotoWorker(QRunnable):
             exctype, value = sys.exc_info()[:2]
             self.signals.error.emit((exctype, value, traceback.format_exc()))
         finally:
-            print("Doing finally things for camera at ", self.camera.address)
+            print("Doing finally things for camera at ", self.camera.camera_name)
             out = [self.camera, result]
             self.signals.result.emit(out)
             self.signals.finished.emit()  # Done

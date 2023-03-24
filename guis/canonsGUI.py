@@ -17,12 +17,12 @@ class canonsGUI(basicGUI):
     The GUI for the two canon previews
     """
 
-    def __init__(self):
-        super(canonsGUI, self).__init__()
+    def __init__(self, **kwargs):
+        super(canonsGUI, self).__init__(**kwargs)
         self.inst_title = self.headerLabel("Fire the Canons!")
 
-        self.topCanonGUI = canonGUI("Top")
-        self.sideCanonGUI = canonGUI("Side")
+        self.topCanonGUI = canonGUI("Top", **kwargs)
+        self.sideCanonGUI = canonGUI("Side", **kwargs)
 
         self.reinitCamerasButton = QtWidgets.QPushButton(
             "Attempt to Reinitialize Canon Cameras"

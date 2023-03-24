@@ -22,3 +22,5 @@ It is assumed this will be install on a Mac computer. Otherwise the instructions
 4. Update environment.yml for mac packages
 5. Add timeout to utils.py/try_url
 6. Check if plugins necessary in main.py
+7. In savePhoto of CanonGUI - check if as_posix can be replaced by str(), and check if taking_photo = True required to download the image
+8. In getPreview of CanonGUI - check if need to mutex around taking_photo thing there.
