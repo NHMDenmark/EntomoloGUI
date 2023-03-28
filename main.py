@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Aug 27 09:59:05 2018
-
-@author: ngw861
-"""
 import os
 import sys
 from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5.QtCore import QThreadPool
 
 from utils import init_logger
 from guis.basicGUI import basicGUI
@@ -37,26 +32,37 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
     def __init__(self):
         super(entomoloGUI, self).__init__()
 
-        self.progress = progressDialog()
-        self.progress._open()
+        # Used to run worker threads in other guis
+        self.threadpool = QThreadPool()
 
-        self.piEyedPiper = piEyedPiperGUI()
-        self.progress.update(60, "Making Bacon..")
+        # make a pop up to give users something pretty to look at
+        # self.progress = progressDialog()
+        # self.progress._open()
 
-        self.canons = canonsGUI()
-        self.progress.update(70, "Doing Breakfast Dishes..")
+        # setup the pi-eyes gui
+        self.piEyedPiper = piEyedPiperGUI(threadpool=self.threadpool)
+        # self.progress.update(60, "Making Bacon..")
 
-        self.takePhotos = takePhotosGUI(STORAGE_PATH)
-        self.progress.update(100, "Grabbing Keys..")
+        # setup the canons guid
+        self.canons = canonsGUI(threadpool=self.threadpool)
+        # self.progress.update(70, "Doing Breakfast Dishes..")
+
+        # setup the take photos button
+        self.takePhotos = takePhotosGUI(STORAGE_PATH, threadpool=self.threadpool)
+        # self.progress.update(100, "Grabbing Keys..")
 
         self.initUI()
 
-        self.progress._close()
+        # self.progress._close()
 
     def initUI(self):
+        """initUT
+        Sets the layout of the UI
+        """
         self.setWindowTitle("EntomoloGUI")
         self.setWindowIcon(QtGui.QIcon("EntomoloGUI/media/icon.png"))
 
+        # specify the locations and size for each component
         self.grid.addWidget(self.piEyedPiper, 0, 0, 1, 5)
         self.grid.addWidget(self.canons, 1, 0, 1, 6)
         self.grid.addWidget(self.takePhotos, 2, 6, 1, 1)
@@ -66,10 +72,12 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
 
 
 if __name__ == "__main__":
-    init_logger(debug=False)
+    init_logger(debug=DEBUG)
 
     QtCore.QCoreApplication.addLibraryPath(
-        os.path.join(os.path.dirname(QtCore.__file__), "plugins")
+        os.path.join(
+            os.path.dirname(QtCore.__file__), "plugins"
+        )  # CR: TODO: Is this necessary with the plugins?
     )
 
     app = QtWidgets.QApplication(sys.argv)

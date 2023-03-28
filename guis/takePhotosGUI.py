@@ -20,9 +20,10 @@ class takePhotosGUI(basicGUI):
     GUI that controls taking photos and saving them
     """
 
-    def __init__(self, storage_path):
-        super(takePhotosGUI, self).__init__()
+    def __init__(self, storage_path, **kwargs):
+        super(takePhotosGUI, self).__init__(**kwargs)
 
+        # sounds used to verify if worked or not
         self.sounds = {
             "Success": QSound(
                 "EntomoloGUI/media/Success.wav"
@@ -33,7 +34,6 @@ class takePhotosGUI(basicGUI):
         }
 
         self.storage_path = Path(storage_path)
-        self.threadpool = QThreadPool()
         self.initUI()
 
     def initUI(self):
@@ -63,64 +63,102 @@ class takePhotosGUI(basicGUI):
               from the takePhoto function.
         """
         camera, result = camera_and_result
-        print("setting status finished", camera.address)
-        self.results[camera.address] = result
-        self.finished[camera.address] = True
+        self.log.info("setting status finished", camera.camera_name)
+        self.results[camera.camera_name] = result
+        self.finished[camera.camera_name] = True
 
     def takePhotos(self):
+        """takePhotos
+        Tell all 7 cameras to take a photo, and wait for all the responses
+        """
         self.log.info("Got Command to Take Photos")
+
+        # open progress dialog
         self.progress = progressDialog()
         self.progress._open()
 
         self.log.info("Started Taking Photos")
 
+        # get list of all cameras
         canons = self.parent().canons.getCameras()
         pi_eyes = self.parent().piEyedPiper.getCameras()
         self.cameras = canons + pi_eyes
 
-        i = 0
+        # dictionaries to store all results and status
         self.results = {}
         self.finished = {}
         self.workers = {}
 
         for camera in self.cameras:
-            self.finished[camera.address] = False
+            # initialize the camera as not finished
+            self.finished[camera.camera_name] = False
+
+            # create a worker to take a single photo from the camera
             worker = takeSinglePhotoWorker(camera)
+
+            # when the worker is done, have it set its status to finished
             worker.signals.result.connect(self.setStatusFinished)
+
+            # start the thread
             self.threadpool.start(worker)
-        while True:
-            sleep(0.1)
-            # print("self.finished", self.finished)
+
+        for i in range(5000):  # prevent infinite loop
+            sleep(0.02)
+            # get the number of cameras that have finished
             n_finished = sum(self.finished.values())
+
+            # get the number of cameras that failed to return images
             n_failed = sum([x == None for x in self.results.values()])
+
+            # calculate the percentage of cameras finished taking photos
             progress = int(100 * n_finished / len(self.finished))
+
+            # update the progress bar
             self.progress.update(
                 progress,
                 f"{n_finished} / {len(self.finished)} cameras returned, {n_failed} Failed",
             )
+
+            # if all finished, close the loop
             if self.all_finished:
                 break
 
-            # Prevents infinite loop if something goes wrong.
-            i += 1
-            if i > 5000:
-                break
-
+        # close the progress window
         self.progress._close()
-        self.savePhotos(self.results)
+
+        # if all the images finished, save the photos
+        if self.all_finished:
+            self.savePhotos(self.results)
+        else:
+            # play 'Failure' sound
+            self.sounds["Failure"].play()
+            # get names of cameras that failed
+            failed_names = [k for k, v in self.results.items() if v == None]
+            self.warn(
+                f"Warning! The following cameras failed to take photos: {failure_names}, files not saved"
+            )
 
     def savePhotos(self, filenames):
+        """savePhotos
+        Given a dictionary of filenames for the cameras, save those files locally
 
+        Args:
+            filenames (dict): dictionary where the keys are the camera names, and the values are the file names
+              of the images on the cameras themselves
+        """
+        # folder name is just a unique identifier with the current timestamp
         folder_name = str(pd.Timestamp.now("UTC"))
         folder_path = self.storage_path / folder_name
 
+        # create the new folder
         folder_path.mkdir(parents=True, exist_ok=False)
 
+        # for each camera, save the photo
         for camera in self.cameras:
-            if filenames.get(camera.address, None) is not None:
-                camera.savePhoto(filenames[camera.address], folder_path)
+            if filenames.get(camera.camera_name, None) is not None:
+                camera.savePhoto(filenames[camera.camera_name], folder_path)
 
-        print("Finished Saving photos")
+        self.log.info("Finished Saving photos")
 
 
 class takeSinglePhotoWorker(QRunnable):
@@ -152,7 +190,6 @@ class takeSinglePhotoWorker(QRunnable):
             exctype, value = sys.exc_info()[:2]
             self.signals.error.emit((exctype, value, traceback.format_exc()))
         finally:
-            print("Doing finally things for camera at ", self.camera.address)
             out = [self.camera, result]
             self.signals.result.emit(out)
             self.signals.finished.emit()  # Done

@@ -6,7 +6,7 @@ import numpy as np
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QRunnable, pyqtSlot, QThreadPool
 
-from utils import try_url, make_big_x
+from utils import try_url, make_x_image
 from guis.workers import WorkerSignals, previewWorker
 from guis.basicGUI import basicGUI, ClickableIMG
 from guis.bigPiEyePreviewGUI import bigPiEyePreviewGUI, bigPiEyePreviewWorker
@@ -23,26 +23,24 @@ class piEyeGUI(basicGUI):
       We then query the API to get the camera preview and tell the pi to take an image
     """
 
-    def __init__(self, address, port):
-        super(piEyeGUI, self).__init__()
+    def __init__(self, address, **kwargs):
+        super(piEyeGUI, self).__init__(**kwargs)
 
         # This is the ip address of the piEye on the local network. Usually something like "pieye-dragonfly.local"
         #   this is configured on the pi-eye itself. To change it, look up changing the hostname
         #   on a pi-zero.
         #   Accessing the previews is then something like: "http://pieye-ant.local:8080/getPreview"
         self.address = address
-        self.port = port
-
-        # Used to run the worker that updates the preview
-        self.threadpool = QThreadPool()
-
-        self.pause_preview = False
 
         # If the camera disconnects, show a big x
-        self.big_x = make_big_x(320, 240)
+        self.x = make_x_image(320, 240)
 
         self.initUI()
         self.startPreviewWorker()
+
+    @property
+    def camera_name(self):
+        return self.address
 
     def initUI(self):
         self.title = QtWidgets.QLabel(f"{self.address} Preview:")
@@ -74,13 +72,11 @@ class piEyeGUI(basicGUI):
             image name: a unique identifier for the image
                 returns None if there was a problem taking the photo
         """
-        self.pause_preview = True
-        take_img_url = f"http://{self.address}:{self.port}/takeAndCacheImage"
+        take_img_url = f"http://{self.address}:8080/takeAndCacheImage"
         response = try_url(take_img_url)
         self.log.info(f"Taking pi-eye photo {self.address}")
-        self.pause_preview = False
         if response is None:
-            #self.warn(f"No Response for pi-eye at address {self.address}")
+            self.log.warn(f"No Response for pi-eye at address {self.address}")
             return None
         else:
             return json.loads(response.content)["image_name"]
@@ -150,7 +146,7 @@ class piEyeGUI(basicGUI):
           Then this function updates the preview to show a giant X
         """
         if img is None:
-            qImg = self.big_x
+            qImg = self.x
         else:
             height, width, _ = img.shape
             bytesPerLine = 3 * width

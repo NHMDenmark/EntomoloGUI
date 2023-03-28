@@ -6,7 +6,7 @@ import traceback
 import gphoto2 as gp
 import pandas as pd
 
-from utils import try_url, make_big_x
+from utils import try_url, make_x_image
 from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, pyqtSlot, QThreadPool
 
 from PIL import Image
@@ -60,8 +60,7 @@ class previewWorker(QRunnable):
             sleep(0.05)
             # Retrieve args/kwargs here; and fire processing using them
             try:
-                if not self.gui.pause_preview:
-                    result = self.gui.getPreview()
+                result = self.gui.getPreview()
             except:
                 pass
                 #traceback.print_exc()
