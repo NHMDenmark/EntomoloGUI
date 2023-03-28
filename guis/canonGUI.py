@@ -11,28 +11,6 @@ from guis.workers import previewWorker
 from guis.basicGUI import basicGUI, ClickableIMG
 from utils import make_x_image
 
-## Maybe, have a class, piEyeWorker and canonWorker, which runs in a thread and controls the taking of photos and the previews, including the big pi preview
-class canonWorker(QObject):
-    finished = pyqtSignal()
-    gotPreview = pyqtSignal(object)
-    gotImage = pyqtSignal(object)
-    progress = pyqtSignal(int)
-    take_photo = False
-
-    def _take_photo(self):
-        self.take_photo = False
-
-    def take_photo(self):
-        self.take_photo = True
-
-    def run(self):
-        self.take_photo = False
-        while True:
-            if self.take_photo:
-                self.get_image()
-            else:
-                self.get_preview()
-
 
 class canonGUI(basicGUI):
     """

@@ -15,7 +15,7 @@ class piEyedPiperGUI(basicGUI):
         self.inst_desc = QtWidgets.QLabel("Previews of all pi-Eyes")
 
         # Initialize each pi-eye
-        self.piEyeAnt = piEyeGUI("pieye-ant.local", **kwargs)
+        self.piEyeAnt = piEyeGUI("127.0.0.1", **kwargs)
         self.piEyeBeetle = piEyeGUI("pieye-beetle.local", **kwargs)
         self.piEyeCicada = piEyeGUI("pieye-cicada.local", **kwargs)
         self.piEyeDragonfly = piEyeGUI("pieye-dragonfly.local", **kwargs)

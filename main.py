@@ -36,24 +36,24 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.threadpool = QThreadPool()
 
         # make a pop up to give users something pretty to look at
-        self.progress = progressDialog()
-        self.progress._open()
+        # self.progress = progressDialog()
+        # self.progress._open()
 
         # setup the pi-eyes gui
         self.piEyedPiper = piEyedPiperGUI(threadpool=self.threadpool)
-        self.progress.update(60, "Making Bacon..")
+        # self.progress.update(60, "Making Bacon..")
 
         # setup the canons guid
         self.canons = canonsGUI(threadpool=self.threadpool)
-        self.progress.update(70, "Doing Breakfast Dishes..")
+        # self.progress.update(70, "Doing Breakfast Dishes..")
 
         # setup the take photos button
         self.takePhotos = takePhotosGUI(STORAGE_PATH, threadpool=self.threadpool)
-        self.progress.update(100, "Grabbing Keys..")
+        # self.progress.update(100, "Grabbing Keys..")
 
         self.initUI()
 
-        self.progress._close()
+        # self.progress._close()
 
     def initUI(self):
         """initUT
