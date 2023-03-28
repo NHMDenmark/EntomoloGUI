@@ -18,11 +18,12 @@ class bigPiEyePreviewWorker(QRunnable):
     This can be used for checking the focus of the camera.
     """
 
-    def __init__(self, address):
+    def __init__(self, address, port):
         super(bigPiEyePreviewWorker, self).__init__()
 
         # Store constructor arguments (re-used for processing)
         self.address = address
+        self.port = port
         self.signals = WorkerSignals()
         self.still_running = True
 
@@ -51,7 +52,7 @@ class bigPiEyePreviewWorker(QRunnable):
         self.signals.finished.emit()
 
     def getPreview(self):
-        take_img_url = f"http://{self.address}:8080/takeAndCacheImage"
+        take_img_url = f"http://{self.address}:{self.port}/takeAndCacheImage"
         response = try_url(take_img_url)
 
         if response is None:
@@ -60,7 +61,7 @@ class bigPiEyePreviewWorker(QRunnable):
         cached_img_name = json.loads(response.content)["image_name"]
 
         get_cached_img_url = (
-            f"http://{self.address}:8080/getCachedImage/{cached_img_name}"
+            f"http://{self.address}:{self.port}/getCachedImage/{cached_img_name}"
         )
         response = try_url(get_cached_img_url)
 

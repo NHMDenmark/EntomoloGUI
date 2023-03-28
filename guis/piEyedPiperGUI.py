@@ -13,11 +13,11 @@ class piEyedPiperGUI(basicGUI):
         self.inst_title = self.headerLabel("Pi Eyed Piper")
         self.inst_desc = QtWidgets.QLabel("Previews of all pi-Eyes")
 
-        self.piEyeAnt = piEyeGUI("pieye-ant.local")
-        self.piEyeBeetle = piEyeGUI("pieye-beetle.local")
-        self.piEyeCicada = piEyeGUI("pieye-cicada.local")
-        self.piEyeDragonfly = piEyeGUI("pieye-dragonfly.local")
-        self.piEyeEarwig = piEyeGUI("pieye-earwig.local")
+        self.piEyeAnt = piEyeGUI("pieye-ant.local", "8080")
+        self.piEyeBeetle = piEyeGUI("pieye-beetle.local", "8081")
+        self.piEyeCicada = piEyeGUI("pieye-cicada.local", "8082")
+        self.piEyeDragonfly = piEyeGUI("pieye-dragonfly.local", "8083")
+        self.piEyeEarwig = piEyeGUI("pieye-earwig.local", "8084")
 
         self.initUI()
 

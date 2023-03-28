@@ -4,9 +4,7 @@ import requests
 import warnings
 import subprocess
 
-from serial import Serial
 from guis import captureThread
-from serial.tools import list_ports
 from PyQt5 import QtGui, QtWidgets, QtCore
 
 

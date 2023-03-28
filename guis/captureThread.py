@@ -11,7 +11,7 @@ import subprocess
 
 from time import sleep
 from PyQt5 import QtCore
-from guis.settings.local_settings import DUMP_FOLDER
+#from guis.settings.local_settings import DUMP_FOLDER
 
 # from basicGUI import basicGUI
 

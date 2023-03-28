@@ -27,7 +27,7 @@ class canonGUI(basicGUI):
         self.controller = self.getController(owner=location)
 
         self.setImageFormatJPEG()  # the preview cannot preview if the camera is set to raw format
-        self.taking_photo = False
+        self.pause_preview = False
         self.big_x = make_big_x(640, 420)
 
         self.threadpool = QThreadPool()
@@ -48,9 +48,13 @@ class canonGUI(basicGUI):
 
     def reinitCamera(self):
         if self.controller is not None:
+            self.pause_preview = True
+            print('Shutting Down ADDRESS:',self.address)
             gp.check_result(gp.gp_camera_exit(self.controller))
 
         self.controller = self.getController(owner=self.location)
+        self.setImageFormatJPEG()
+        self.pause_preview = False
 
     def startPreviewWorker(self):
         self.preview_worker = previewWorker(self)
@@ -58,8 +62,6 @@ class canonGUI(basicGUI):
         self.threadpool.start(self.preview_worker)
 
     def updatePreview(self, img):
-        if isinstance(img, int):
-            wtf
         if img is None:
             img = self.big_x
 
@@ -117,11 +119,11 @@ class canonGUI(basicGUI):
 
     def takePhoto(self):
         if self.controller is not None:
+            self.pause_preview = True  # pause preview
             self.setImageFormatRAW()
-            self.taking_photo = True  # pause preview
             file_path = self.controller.capture(gp.GP_CAPTURE_IMAGE)
-            self.taking_photo = False
             self.setImageFormatJPEG()  # the preview cannot preview if the camera is set to raw format
+            self.pause_preview = False
 
             return file_path
         else:
@@ -130,11 +132,11 @@ class canonGUI(basicGUI):
     def savePhoto(self, name, folder):
         if self.controller is not None:
             target = folder / (self.location + ".jpg")
-            self.taking_photo = True
+            self.pause_preview = True
             camera_file = self.controller.file_get(
                 name.folder, name.name, gp.GP_FILE_TYPE_NORMAL
             )
-            self.taking_photo = False
+            self.pause_preview = False
             camera_file.save(target.as_posix())
             return True
         else:
@@ -170,7 +172,7 @@ class canonGUI(basicGUI):
         if self.controller is None:
             return self.big_x
 
-        if not self.taking_photo:
+        if not self.pause_preview:
             # required configuration will depend on camera type!
             # get configuration tree
             config = gp.check_result(gp.gp_camera_get_config(self.controller))
