@@ -33,6 +33,7 @@ class canonGUI(basicGUI):
 
         # flag used to stop the preview when the camera is taking a photo
         self.pause_preview = False
+        self.preview_paused = False
 
         # if the camera cannot provide a preview, or the camera cannot be found, display an x instead
         self.x = make_x_image(640, 420)
@@ -52,6 +53,9 @@ class canonGUI(basicGUI):
         self.mutex.lock()
         self.pause_preview = val
         self.mutex.unlock()
+        while self.preview_paused != True:
+            print('waiting for preview to be actually paused')
+            sleep(0.05)
 
     @property
     def camera_name(self):
@@ -84,7 +88,7 @@ class canonGUI(basicGUI):
         """
         if self.controller is not None:
             self.pause_preview = True
-            print('Shutting Down ADDRESS:',self.address)
+            print('Shutting Down ADDRESS:',self.camera_name)
             gp.check_result(gp.gp_camera_exit(self.controller))
 
         self.controller = self.getController(owner=self.location)
@@ -253,7 +257,7 @@ class canonGUI(basicGUI):
             return None
         else:
             # get full target path with filename
-            target = local_folder / (self.camera_name + ".jpg")
+            target = local_folder / (self.camera_name + ".cr3")
             self.set_pause_preview(True)
             # get the camera file location from the camera
             camera_file = self.controller.file_get(
@@ -262,7 +266,7 @@ class canonGUI(basicGUI):
             self.set_pause_preview(False)
             # save the image to the target location
             camera_file.save(
-                target.as_posix()
+                str(target)
             )  # CR: Check: can wrap in str() so works on windows
             return True
 
@@ -308,8 +312,14 @@ class canonGUI(basicGUI):
             return self.x
 
         if self.pause_preview:
+            self.mutex.lock()
+            self.preview_paused = True
+            self.mutex.unlock()
             sleep(0.05)
         else:
+            self.mutex.lock()
+            self.preview_paused = False
+            self.mutex.unlock()
             # required configuration will depend on camera type!
             # get configuration tree
             config = gp.check_result(gp.gp_camera_get_config(self.controller))

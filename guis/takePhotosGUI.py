@@ -63,7 +63,8 @@ class takePhotosGUI(basicGUI):
               from the takePhoto function.
         """
         camera, result = camera_and_result
-        self.log.info("setting status finished", camera.camera_name)
+        name = str(camera.camera_name)
+        self.log.info("setting status finished", name)
         self.results[camera.camera_name] = result
         self.finished[camera.camera_name] = True
 
@@ -87,7 +88,6 @@ class takePhotosGUI(basicGUI):
         # dictionaries to store all results and status
         self.results = {}
         self.finished = {}
-        self.workers = {}
 
         for camera in self.cameras:
             # initialize the camera as not finished
@@ -116,18 +116,23 @@ class takePhotosGUI(basicGUI):
             # update the progress bar
             self.progress.update(
                 progress,
-                f"{n_finished} / {len(self.finished)} cameras returned, {n_failed} Failed",
+                f"{n_finished} / {len(self.finished)} photos taken, {n_failed} Failed",
             )
 
             # if all finished, close the loop
             if self.all_finished:
                 break
 
-        # close the progress window
-        self.progress._close()
+        # get the number of cameras that failed to return images
+        n_failed = sum([x == None for x in self.results.values()])
 
         # if all the images finished, save the photos
-        if self.all_finished:
+        if n_failed == 0:
+            self.sounds["Success"].play()
+            self.progress.update(
+                100,
+                f"All photos successfully taken.. Saving photos",
+            )
             self.savePhotos(self.results)
         else:
             # play 'Failure' sound
@@ -135,8 +140,11 @@ class takePhotosGUI(basicGUI):
             # get names of cameras that failed
             failed_names = [k for k, v in self.results.items() if v == None]
             self.warn(
-                f"Warning! The following cameras failed to take photos: {failure_names}, files not saved"
+                f"Warning! The following cameras failed to take photos: {failed_names}, files not saved"
             )
+        
+        # close the progress window
+        self.progress._close()
 
     def savePhotos(self, filenames):
         """savePhotos
@@ -153,12 +161,55 @@ class takePhotosGUI(basicGUI):
         # create the new folder
         folder_path.mkdir(parents=True, exist_ok=False)
 
-        # for each camera, save the photo
-        for camera in self.cameras:
-            if filenames.get(camera.camera_name, None) is not None:
-                camera.savePhoto(filenames[camera.camera_name], folder_path)
+        # dictionaries to store status
+        self.finished = {}
 
-        self.log.info("Finished Saving photos")
+        for camera in self.cameras:
+
+            if filenames.get(camera.camera_name, None) is not None:
+                # initialize the camera as not finished
+                self.finished[camera.camera_name] = False
+
+                # create a worker to take a single photo from the camera
+                worker = saveSinglePhotoWorker(camera, filenames[camera.camera_name], folder_path)
+
+                # when the worker is done, have it set its status to finished
+                worker.signals.result.connect(self.setStatusFinished)
+
+                # start the thread
+                self.threadpool.start(worker)
+
+        for i in range(5000):  # prevent infinite loop
+            sleep(0.02)
+            # get the number of cameras that have finished
+            n_finished = sum(self.finished.values())
+
+            # get the number of cameras that failed to return images
+            n_failed = sum([x == None for x in self.results.values()])
+
+            # calculate the percentage of cameras finished taking photos
+            progress = int(100 * n_finished / len(self.finished))
+
+            # update the progress bar
+            self.progress.update(
+                progress,
+                f"{n_finished} / {len(self.finished)} photos saved, {n_failed} Failed",
+            )
+
+            # if all finished, close the loop
+            if self.all_finished:
+                break
+
+        # get the number of cameras that failed to return images
+        n_failed = sum([x == None for x in self.results.values()])
+
+        self.log.info("Finished Saving photos in " + str(folder_path))
+
+        # check that all photos were actually saved
+        n_saved = len([x for x in folder_path.glob('*') if x.is_file()])
+
+        if n_saved != len(self.cameras):
+            self.warn('Something went wrong saving the files. Please check the save folder' + str(folder_path) + ', and/or contact support')
 
 
 class takeSinglePhotoWorker(QRunnable):
@@ -185,6 +236,41 @@ class takeSinglePhotoWorker(QRunnable):
         try:
             if self.camera is not None:
                 result = self.camera.takePhoto()  # Done
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.error.emit((exctype, value, traceback.format_exc()))
+        finally:
+            out = [self.camera, result]
+            self.signals.result.emit(out)
+            self.signals.finished.emit()  # Done
+
+class saveSinglePhotoWorker(QRunnable):
+    """
+    Worker thread for telling a single camera to save a photo.
+      Threads are used here so we can simultaneously (asynchronously) tell all the
+      cameras to take photos at once, and then the takePhotosWorker can wait for all the
+      confirmations that the photo was taken, and once they all confirm the takePhotosWorker
+      can tell the user that all photos were successfully taken. The photos then need to be
+      moved to the local computer (this takes longer, so it is done separately)
+    """
+
+    def __init__(self, camera, camera_path, target_folder):
+        super(saveSinglePhotoWorker, self).__init__()
+        self.camera = camera
+        self.camera_path = camera_path
+        self.target_folder = target_folder
+        self.signals = WorkerSignals()
+
+    @pyqtSlot()
+    def run(self):
+        """
+        Initialise the runner function with passed args, kwargs.
+        """
+        result = None
+        try:
+            if self.camera is not None:
+                result = self.camera.savePhoto(self.camera_path, self.target_folder)  # Done
         except:
             traceback.print_exc()
             exctype, value = sys.exc_info()[:2]

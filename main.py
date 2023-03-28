@@ -70,14 +70,17 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.setLayout(self.grid)
         self.show()
 
+        topLeftPoint = QtWidgets.QApplication.desktop().availableGeometry().topLeft()
+        self.move(topLeftPoint)
+
 
 if __name__ == "__main__":
     init_logger(debug=DEBUG)
 
     QtCore.QCoreApplication.addLibraryPath(
         os.path.join(
-            os.path.dirname(QtCore.__file__), "plugins"
-        )  # CR: TODO: Is this necessary with the plugins?
+            os.path.dirname(QtCore.__file__)
+        )
     )
 
     app = QtWidgets.QApplication(sys.argv)

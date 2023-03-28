@@ -56,9 +56,9 @@ class basicGUI(QtWidgets.QWidget):
             _exit (bool, optional): Whether to exit the entire application or not after this warning is closed. Defaults to False.
         """
         warnings.warn(msg)
-        # warning = QtWidgets.QMessageBox()
-        # warning.setWindowTitle("Warning Encountered")
-        # warning.setText(msg)
-        # warning.exec_()
-        # if _exit:
-        #    sys.exit()
+        warning = QtWidgets.QMessageBox()
+        warning.setWindowTitle("Warning Encountered")
+        warning.setText(msg)
+        warning.exec_()
+        if _exit:
+           sys.exit()

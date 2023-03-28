@@ -150,7 +150,7 @@ class bigPiEyePreviewGUI(basicGUI):
         pixmap01 = QtGui.QPixmap.fromImage(qImg)
         preview_img = QtGui.QPixmap(pixmap01)
         preview_img = preview_img.scaled(
-            4056 // 3, 3040 // 3, QtCore.Qt.KeepAspectRatio
+            4056 // 4, 3040 // 4, QtCore.Qt.KeepAspectRatio
         )
 
         self.img.setPixmap(preview_img)
