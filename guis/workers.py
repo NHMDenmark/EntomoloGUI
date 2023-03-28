@@ -2,11 +2,9 @@ import io
 import sys
 import time
 import json
-import imageio
 import traceback
-import numpy as np
-import pandas as pd
 import gphoto2 as gp
+import pandas as pd
 
 from utils import try_url, make_x_image
 from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, pyqtSlot, QThreadPool
@@ -64,8 +62,9 @@ class previewWorker(QRunnable):
             try:
                 result = self.gui.getPreview()
             except:
-                traceback.print_exc()
-                exctype, value = sys.exc_info()[:2]
-                self.signals.error.emit((exctype, value, traceback.format_exc()))
+                pass
+                #traceback.print_exc()
+                #exctype, value = sys.exc_info()[:2]
+                #self.signals.error.emit((exctype, value, traceback.format_exc()))
             else:
                 self.signals.result.emit(result)  # Return the result of the processing

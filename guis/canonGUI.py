@@ -83,9 +83,13 @@ class canonGUI(basicGUI):
         For example, if a camera is unplugged.
         """
         if self.controller is not None:
+            self.pause_preview = True
+            print('Shutting Down ADDRESS:',self.address)
             gp.check_result(gp.gp_camera_exit(self.controller))
 
         self.controller = self.getController(owner=self.location)
+        self.setImageFormatJPEG()
+        self.pause_preview = False
 
     def startPreviewWorker(self):
         """startPreviewWorker

@@ -53,7 +53,7 @@ def try_url(url):
     """
     log = logging.getLogger("UThread")
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
         return response
     except requests.exceptions.RequestException as err:
@@ -74,7 +74,6 @@ def try_url(url):
         )
     except Exception as e:
         log.debug(f'Error connecting to url: "{url}", Exception raised: "{e}"')
-
     return None
 
 

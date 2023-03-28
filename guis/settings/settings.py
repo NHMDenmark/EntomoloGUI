@@ -1,2 +1,2 @@
-STORAGE_PATH = "/home/rob/EntomoloGUIstorage"
-DEBUG = False
+STORAGE_PATH = "/Users/dassco/Desktop/Image Storage"
+DEBUG = True

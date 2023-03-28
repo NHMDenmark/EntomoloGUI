@@ -29,7 +29,7 @@ class piEyeGUI(basicGUI):
         # This is the ip address of the piEye on the local network. Usually something like "pieye-dragonfly.local"
         #   this is configured on the pi-eye itself. To change it, look up changing the hostname
         #   on a pi-zero.
-        #   Accessing the previews is then something like: "http://pieye-dragonfly.local:8080/getPreview"
+        #   Accessing the previews is then something like: "http://pieye-ant.local:8080/getPreview"
         self.address = address
 
         # If the camera disconnects, show a big x
@@ -92,7 +92,7 @@ class piEyeGUI(basicGUI):
             None if we could not get a response
         """
         print("Saving pi-eye photo")
-        get_cached_img_url = f"http://{self.address}:8080/getCachedImage/{name}"
+        get_cached_img_url = f"http://{self.address}:{self.port}/getCachedImage/{name}"
         response = try_url(get_cached_img_url)
 
         fn = self.address.replace("local", "jpg")
@@ -109,7 +109,7 @@ class piEyeGUI(basicGUI):
         Although the update is slow, as it asks the Pi-Eye to capture a full-resolution image each time.
         """
         self.log.info("Opening Focused Pi-Eye Preview Window")
-        self.big_preview_worker = bigPiEyePreviewWorker(self.address)
+        self.big_preview_worker = bigPiEyePreviewWorker(self.address, self.port)
 
         self.big_preview = bigPiEyePreviewGUI(self.address, self.big_preview_worker)
         self.big_preview.show()
@@ -130,7 +130,7 @@ class piEyeGUI(basicGUI):
         """getPreview
         Get the preview from the Pi-Eye url. If something goes wrong, return None
         """
-        self.preview_url = f"http://{self.address}:8080/getPreview"
+        self.preview_url = f"http://{self.address}:{self.port}/getPreview"
         response = try_url(self.preview_url)
 
         if response is None:
