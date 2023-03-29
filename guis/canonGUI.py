@@ -89,7 +89,10 @@ class canonGUI(basicGUI):
         if self.controller is not None:
             self.pause_preview = True
             print('Shutting Down ADDRESS:',self.camera_name)
-            gp.check_result(gp.gp_camera_exit(self.controller))
+            try:
+                gp.check_result(gp.gp_camera_exit(self.controller))
+            except Exception as ex:
+                self.log.info("Exception encountered: " + str(ex))
 
         self.controller = self.getController(owner=self.location)
         self.setImageFormatJPEG()
@@ -333,32 +336,36 @@ class canonGUI(basicGUI):
             self.mutex.unlock()
             # required configuration will depend on camera type!
             # get configuration tree
-            config = gp.check_result(gp.gp_camera_get_config(self.controller))
-            # find the image format config item
-            # camera dependent - 'imageformat' is 'imagequality' on some
-            OK, image_format = gp.gp_widget_get_child_by_name(config, "imageformat")
-            if OK >= gp.GP_OK:
-                # get current setting
-                value = gp.check_result(gp.gp_widget_get_value(image_format))
-                # make sure it's not raw
-                if "raw" in value.lower():
-                    print("Cannot preview raw images")
-                    return 1
-            # find the capture size class config item
-            # need to set this on my Canon 350d to get preview to work at all
-            OK, capture_size_class = gp.gp_widget_get_child_by_name(
-                config, "capturesizeclass"
-            )
-            if OK >= gp.GP_OK:
-                # set value
-                value = gp.check_result(gp.gp_widget_get_choice(capture_size_class, 2))
-                gp.check_result(gp.gp_widget_set_value(capture_size_class, value))
-                # set config
-                gp.check_result(gp.gp_camera_set_config(self.controller, config))
-            # capture preview image (not saved to camera memory card)
-            camera_file = gp.check_result(gp.gp_camera_capture_preview(self.controller))
-            file_data = gp.check_result(gp.gp_file_get_data_and_size(camera_file))
-            # display image
-            # data = memoryview(file_data)
-            image = ImageQt(Image.open(io.BytesIO(file_data)))
-            return image
+            try:
+                config = gp.check_result(gp.gp_camera_get_config(self.controller))
+                # find the image format config item
+                # camera dependent - 'imageformat' is 'imagequality' on some
+                OK, image_format = gp.gp_widget_get_child_by_name(config, "imageformat")
+                if OK >= gp.GP_OK:
+                    # get current setting
+                    value = gp.check_result(gp.gp_widget_get_value(image_format))
+                    # make sure it's not raw
+                    if "raw" in value.lower():
+                        print("Cannot preview raw images")
+                        return 1
+                # find the capture size class config item
+                # need to set this on my Canon 350d to get preview to work at all
+                OK, capture_size_class = gp.gp_widget_get_child_by_name(
+                    config, "capturesizeclass"
+                )
+                if OK >= gp.GP_OK:
+                    # set value
+                    value = gp.check_result(gp.gp_widget_get_choice(capture_size_class, 2))
+                    gp.check_result(gp.gp_widget_set_value(capture_size_class, value))
+                    # set config
+                    gp.check_result(gp.gp_camera_set_config(self.controller, config))
+                # capture preview image (not saved to camera memory card)
+                camera_file = gp.check_result(gp.gp_camera_capture_preview(self.controller))
+                file_data = gp.check_result(gp.gp_file_get_data_and_size(camera_file))
+                # display image
+                # data = memoryview(file_data)
+                image = ImageQt(Image.open(io.BytesIO(file_data)))
+                return image
+            except Exception as ex:
+                self.log.info("Exception encountered:" + str(ex))
+                return None
