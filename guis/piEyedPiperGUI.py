@@ -19,7 +19,7 @@ class piEyedPiperGUI(basicGUI):
         self.piEyeBeetle = piEyeGUI("pieye-beetle.local", **kwargs)
         self.piEyeCicada = piEyeGUI("pieye-cicada.local", **kwargs)
         self.piEyeDragonfly = piEyeGUI("pieye-dragonfly.local", **kwargs)
-        # self.piEyeEarwig = piEyeGUI("pieye-earwig.local", **kwargs)
+        self.piEyeEarwig = piEyeGUI("pieye-earwig.local", **kwargs)
 
         self.initUI()
 
@@ -30,7 +30,7 @@ class piEyedPiperGUI(basicGUI):
         self.grid.addWidget(self.piEyeBeetle, 1, 1, 1, 1)
         self.grid.addWidget(self.piEyeCicada, 1, 2, 1, 1)
         self.grid.addWidget(self.piEyeDragonfly, 1, 3, 1, 1)
-        # self.grid.addWidget(self.piEyeEarwig, 1, 4, 1, 1)
+        self.grid.addWidget(self.piEyeEarwig, 1, 4, 1, 1)
         self.setLayout(self.grid)
 
     def getCameras(self):
@@ -46,6 +46,6 @@ class piEyedPiperGUI(basicGUI):
             self.piEyeBeetle,
             self.piEyeCicada,
             self.piEyeDragonfly,
-            # self.piEyeEarwig,
+            self.piEyeEarwig,
         ]
         return cameras

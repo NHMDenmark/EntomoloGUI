@@ -17,5 +17,6 @@ It is assumed this will be install on a Mac computer. Otherwise the instructions
 
 
 # TODO
-1. Package everything into a portable app - Qsound does not seem to work in Automator.
+1. Package everything into a portable app
 2. We don't have enough usb ports for the keyboard, mouse and all the pi-eyes, so we need to get a different keyboard/mouse or buy another usb hub - for testing I am taking pieye-earwig out. 
+3. Preview Qrunnable workers should be moved to Qthreads so they can be stopped gracefully. These Qthreads could then control all camera functions (at least for the canon). This way the mutex flags should not be necessary

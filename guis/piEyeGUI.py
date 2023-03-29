@@ -115,6 +115,18 @@ class piEyeGUI(basicGUI):
         self.big_preview_worker.signals.result.connect(self.big_preview.updatePreview)
         self.threadpool.start(self.big_preview_worker)
 
+
+    def closeEvent(self, event):
+        """closeEvent
+        Closes the window and exits the worker.
+        Automatically triggered when the window is closed. (built in part of PyQt)
+        """
+        self.log.info(
+            f"Telling pi-eye ({self.camera_name}) preview worker to close"
+        )
+        self.preview_worker.close()
+        event.accept()
+
     def startPreviewWorker(self):
         """startPreviewWorker
         In order for all the previews to update asynchronously we give each

@@ -26,10 +26,10 @@ class takePhotosGUI(basicGUI):
         # sounds used to verify if worked or not
         self.sounds = {
             "Success": QSound(
-                "EntomoloGUI/media/Success.wav"
+                "/Users/dassco/Pi-Eyed-Piper/EntomoloGUI/media/Success.wav"
             ),  # Sound Byte from https://freesound.org/people/Thirsk/sounds/121104/
             "Failure": QSound(
-                "EntomoloGUI/media/Failure.wav"
+                "/Users/dassco/Pi-Eyed-Piper/EntomoloGUI/media/Failure.wav"
             ),  # Sound Byte from https://freesound.org/people/Walter_Odington/sounds/25616/
         }
 
@@ -64,7 +64,7 @@ class takePhotosGUI(basicGUI):
         """
         camera, result = camera_and_result
         name = str(camera.camera_name)
-        self.log.info("setting status finished", name)
+        self.log.info("setting status finished " + name)
         self.results[camera.camera_name] = result
         self.finished[camera.camera_name] = True
 

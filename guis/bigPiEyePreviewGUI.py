@@ -7,9 +7,8 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QMutex
 
 from utils import make_x_image, try_url
+from guis.basicGUI import basicGUI
 from guis.workers import WorkerSignals
-from guis.progressDialog import progressDialog
-from guis.basicGUI import basicGUI, ClickableIMG
 from PyQt5.QtCore import QRunnable, pyqtSlot
 
 

@@ -1,17 +1,9 @@
-import io
+import sip
 import sys
-import time
-import json
 import traceback
-import gphoto2 as gp
-import pandas as pd
-
-from utils import try_url, make_x_image
-from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, pyqtSlot, QThreadPool
-
-from PIL import Image
 from time import sleep
-from PIL.ImageQt import ImageQt
+from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, pyqtSlot, QThreadPool, QMutex
+
 
 # Worker Signals framework from https://www.pythonguis.com/tutorials/multithreading-pyqt-applications-qthreadpool/
 class WorkerSignals(QObject):
@@ -50,21 +42,32 @@ class previewWorker(QRunnable):
         self.gui = gui
         # Store constructor arguments (re-used for processing)
         self.signals = WorkerSignals()
+        self.still_running = True  # used to stop the worker when the window is closed
+        self.mutex = QMutex()
+
+    def close(self):
+        """close
+        Stop the worker when the preview window is closed
+        """
+        self.mutex.lock()
+        self.still_running = False  # ends the loops/worker above
+        self.mutex.unlock()
+        self.signals.finished.emit()
 
     @pyqtSlot()
     def run(self):
         """
-        Initialise the runner function with passed args, kwargs.
+        Initialise the runner function.
         """
-        while True:
+        
+        while self.still_running:
             sleep(0.05)
-            # Retrieve args/kwargs here; and fire processing using them
             try:
                 result = self.gui.getPreview()
             except:
-                pass
-                #traceback.print_exc()
-                #exctype, value = sys.exc_info()[:2]
-                #self.signals.error.emit((exctype, value, traceback.format_exc()))
+                traceback.print_exc()
+                exctype, value = sys.exc_info()[:2]
+                self.signals.error.emit((exctype, value, traceback.format_exc()))
             else:
-                self.signals.result.emit(result)  # Return the result of the processing
+                if not sip.isdeleted(self.signals):
+                    self.signals.result.emit(result)  # Return the result of the processing

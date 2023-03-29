@@ -95,6 +95,17 @@ class canonGUI(basicGUI):
         self.setImageFormatJPEG()
         self.pause_preview = False
 
+    def closeEvent(self, event):
+        """closeEvent
+        Closes the window and exits the worker.
+        Automatically triggered when the window is closed. (built in part of PyQt)
+        """
+        self.log.info(
+            f"Telling canon ({self.camera_name}) preview worker to close"
+        )
+        self.preview_worker.close()
+        event.accept()
+
     def startPreviewWorker(self):
         """startPreviewWorker
         Start the preview worker thread and add it to the overall threadpool.
