@@ -5,6 +5,7 @@ import pandas as pd
 
 from time import sleep
 from pathlib import Path
+from datetime import datetime
 from PyQt5 import QtWidgets
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtCore import QRunnable, pyqtSlot, QThreadPool
@@ -35,6 +36,8 @@ class takePhotosGUI(basicGUI):
 
         self.storage_path = Path(storage_path)
         self.initUI()
+        self.take_photos_timings = []
+        self.save_photos_timings = []
 
     def initUI(self):
         self.takePhotosButton = QtWidgets.QPushButton("Take Photos")
@@ -67,13 +70,14 @@ class takePhotosGUI(basicGUI):
         self.log.info("setting status finished " + name)
         self.results[camera.camera_name] = result
         self.finished[camera.camera_name] = True
+        self.timing[camera.camera_name] = pd.Timestamp.now() - self.start_time
 
     def takePhotos(self):
         """takePhotos
         Tell all 7 cameras to take a photo, and wait for all the responses
         """
         self.log.info("Got Command to Take Photos")
-
+        self.start_time = pd.Timestamp.now()
         # open progress dialog
         self.progress = progressDialog()
         self.progress._open()
@@ -88,6 +92,7 @@ class takePhotosGUI(basicGUI):
         # dictionaries to store all results and status
         self.results = {}
         self.finished = {}
+        self.timing = {}
 
         for camera in self.cameras:
             # initialize the camera as not finished
@@ -128,6 +133,10 @@ class takePhotosGUI(basicGUI):
 
         # if all the images finished, save the photos
         if n_failed == 0:
+            end_time = pd.Timestamp.now()
+            self.timing['total'] = end_time - self.start_time
+            self.take_photos_timings += [self.timing]
+            pd.DataFrame(self.take_photos_timings).to_csv('take_photo_timings.csv')
             self.sounds["Success"].play()
             self.progress.update(
                 100,
@@ -154,6 +163,7 @@ class takePhotosGUI(basicGUI):
             filenames (dict): dictionary where the keys are the camera names, and the values are the file names
               of the images on the cameras themselves
         """
+        self.start_time = pd.Timestamp.now()
         # folder name is just a unique identifier with the current timestamp
         folder_name = str(pd.Timestamp.now("UTC"))
         folder_path = self.storage_path / folder_name
@@ -163,6 +173,7 @@ class takePhotosGUI(basicGUI):
 
         # dictionaries to store status
         self.finished = {}
+        self.timing = {}
 
         for camera in self.cameras:
 
@@ -210,6 +221,12 @@ class takePhotosGUI(basicGUI):
 
         if n_saved != len(self.cameras):
             self.warn('Something went wrong saving the files. Please check the save folder' + str(folder_path) + ', and/or contact support')
+
+        
+        end_time = pd.Timestamp.now()
+        self.timing['total'] = end_time - self.start_time
+        self.save_photos_timings += [self.timing]
+        pd.DataFrame(self.save_photos_timings).to_csv('save_photo_timings.csv')
 
 
 class takeSinglePhotoWorker(QRunnable):

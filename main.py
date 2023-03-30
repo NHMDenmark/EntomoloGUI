@@ -84,7 +84,7 @@ if __name__ == "__main__":
     )
 
     app = QtWidgets.QApplication(sys.argv)
-    app.setWindowIcon(QtGui.QIcon("EntomoloGUI/media/icon.png"))
+    app.setWindowIcon(QtGui.QIcon("/Users/dassco/Pi-Eyed-Piper/EntomoloGUI/media/icon.png"))
     gui = entomoloGUI()
     gui.show()
     sys.exit(app.exec_())
