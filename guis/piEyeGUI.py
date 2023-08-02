@@ -77,7 +77,10 @@ class piEyeGUI(basicGUI):
             tmpdir = Path(tempfile.gettempdir())
 
             # get filename from response
-            filename = response.json()["filename"]
+            filename = (
+                response.headers["Content-Disposition"].split("=")[1].replace('"', "")
+            )
+            self.log.info(f"Saving photo {filename}")
             filepath = tmpdir / filename
             open(filepath, "wb").write(response.content)
 
