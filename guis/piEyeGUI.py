@@ -4,6 +4,9 @@ import imageio
 import numpy as np
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QRunnable, pyqtSlot, QThreadPool
+import tempfile
+from pathlib import Path
+
 
 from utils import try_url, make_x_image
 from guis.workers import WorkerSignals, previewWorker
@@ -28,7 +31,7 @@ class piEyeGUI(basicGUI):
         # This is the ip address of the piEye on the local network. Usually something like "pieye-dragonfly.local"
         #   this is configured on the pi-eye itself. To change it, look up changing the hostname
         #   on a pi-zero.
-        #   Accessing the previews is then something like: "http://pieye-ant.local:8080/getPreview"
+        #   Accessing the previews is then something like: "http://pieye-ant.local:8080/camera/preview"
         self.address = address
 
         # If the camera disconnects, show a big x
@@ -59,47 +62,46 @@ class piEyeGUI(basicGUI):
     def takePhoto(self):
         """takePhoto
 
-        Tells the Pi-Eye to take a photo and cache the output.
-        This returns a unique identifier for the image, which is the
-           key to a dictionary stored on the pi.
-           This is to ensure we can get the response that the Pi-Eye took
-           the photo as soon as possible, and then we can download the photo
-           while the digitizer is preparing the next specimen. The unique identifier
-           ensures that we get the correct photo back
-
+        Takes a photo and saves it to a temporary folder on this computer.
         Returns:
-            image name: a unique identifier for the image
-                returns None if there was a problem taking the photo
+            The name of the image that was taken, or None if there was an error
+
         """
-        take_img_url = f"http://{self.camera_name}:8080/takeAndCacheImage"
+        take_img_url = f"http://{self.camera_name}:8080/camera/still-capture"
         response = try_url(take_img_url)
         self.log.info(f"Taking pi-eye photo {self.camera_name}")
         if response is None:
             self.log.warn(f"No Response for pi-eye at address {self.camera_name}")
             return None
         else:
-            return json.loads(response.content)["image_name"]
+            tmpdir = Path(tempfile.gettempdir())
 
-    def savePhoto(self, name, folder):
+            # get filename from response
+            filename = response.json()["filename"]
+            filepath = tmpdir / filename
+            open(filepath, "wb").write(response.content)
+
+            return filepath
+
+    def savePhoto(self, filepath, folder):
         """savePhoto
 
-        Tells the Pi-Eye to fetch an image that was previously cached,
-          we then save it to a local folder
+        Moves the photo from the temporary folder to the folder specified, with the name specified.
 
-        Returns:
-            True if image was saved successfully
-            None if we could not get a response
         """
-        get_cached_img_url = f"http://{self.camera_name}:8080/getCachedImage/{name}"
-        response = try_url(get_cached_img_url)
+        # open file at filepath
+        # save it to folder with name
+        try:
+            self.log.info(f"Saving photo {filepath} to {folder}")
+            filename = Path(filepath).name
+            newpath = Path(folder) / filename
 
-        fn = self.address.replace("local", "jpg")
-        if response is None:
-            return None
-        else:
-            data = imageio.imread(response.content)
-            imageio.imwrite(folder / fn, data)
-            return True
+            # move file to new location
+            Path(filepath).rename(newpath)
+
+        except:
+            self.log.warn(f"Could not save photo {filepath} to {folder}")
+            return False
 
     def openFocusedPreviewWindow(self):
         """openFocusedPreviewWindow
@@ -115,15 +117,12 @@ class piEyeGUI(basicGUI):
         self.big_preview_worker.signals.result.connect(self.big_preview.updatePreview)
         self.threadpool.start(self.big_preview_worker)
 
-
     def closeEvent(self, event):
         """closeEvent
         Closes the window and exits the worker.
         Automatically triggered when the window is closed. (built in part of PyQt)
         """
-        self.log.info(
-            f"Telling pi-eye ({self.camera_name}) preview worker to close"
-        )
+        self.log.info(f"Telling pi-eye ({self.camera_name}) preview worker to close")
         self.preview_worker.close()
         event.accept()
 
@@ -140,7 +139,7 @@ class piEyeGUI(basicGUI):
         """getPreview
         Get the preview from the Pi-Eye url. If something goes wrong, return None
         """
-        self.preview_url = f"http://{self.camera_name}:8080/getPreview"
+        self.preview_url = f"http://{self.camera_name}:8080/camera/preview"
         response = try_url(self.preview_url)
 
         if response is None:
