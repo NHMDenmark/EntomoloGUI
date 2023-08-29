@@ -64,21 +64,9 @@ class bigPiEyePreviewWorker(QRunnable):
         Returns:
             data: a numpy array of the image.
         """
-        # Tell the Pi-Eye to take and cache a new image
-        take_img_url = f"http://{self.camera_name}:8080/takeAndCacheImage"
-        response = try_url(take_img_url)
-
-        # Check if it did not work - return None
-        if response is None:
-            return None
-
-        # Otherwise take the returned image name and tell the API to
-        #   get the cached image
-        cached_img_name = json.loads(response.content)["image_name"]
-        get_cached_img_url = (
-            f"http://{self.camera_name}:8080/getCachedImage/{cached_img_name}"
-        )
-        response = try_url(get_cached_img_url)
+        # Get full resolution preview
+        url = f"http://{self.camera_name}:8080/full-preview"
+        response = try_url(url)
 
         # Check if it did not work - return None
         if response is None:
