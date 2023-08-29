@@ -3,3 +3,5 @@ __pycache__/
 log.log
 .vscode
 __pycache__
+save_photo_timings.csv
+take_photo_timings.csv
