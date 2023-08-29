@@ -67,7 +67,7 @@ class piEyeGUI(basicGUI):
             The name of the image that was taken, or None if there was an error
 
         """
-        take_img_url = f"http://{self.camera_name}:8080/camera/still-capture"
+        take_img_url = f"http://{self.camera_name}:8080/capture"
         response = try_url(take_img_url)
         self.log.info(f"Taking pi-eye photo {self.camera_name}")
         if response is None:
@@ -142,7 +142,7 @@ class piEyeGUI(basicGUI):
         """getPreview
         Get the preview from the Pi-Eye url. If something goes wrong, return None
         """
-        self.preview_url = f"http://{self.camera_name}:8080/camera/preview"
+        self.preview_url = f"http://{self.camera_name}:8080/quick-preview"
         response = try_url(self.preview_url)
 
         if response is None:
