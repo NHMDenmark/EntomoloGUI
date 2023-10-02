@@ -7,6 +7,7 @@ from time import sleep
 from pathlib import Path
 from datetime import datetime
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import *
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtCore import QRunnable, pyqtSlot, QThreadPool
 
@@ -34,6 +35,7 @@ class takePhotosGUI(basicGUI):
             ),  # Sound Byte from https://freesound.org/people/Walter_Odington/sounds/25616/
         }
 
+        
         self.storage_path = Path(storage_path)
         self.initUI()
         self.take_photos_timings = []
@@ -43,7 +45,8 @@ class takePhotosGUI(basicGUI):
         self.takePhotosButton = QtWidgets.QPushButton("Take Photos")
         self.takePhotosButton.clicked.connect(self.takePhotos)
 
-        self.grid.addWidget(self.takePhotosButton, 0, 0, 1, 1)
+        self.grid.addWidget(self.takePhotosButton, 0, 0, 10, 10)
+        
         self.setLayout(self.grid)
 
     @property

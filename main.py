@@ -62,7 +62,7 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.setWindowTitle("EntomoloGUI")
         self.setWindowIcon(QtGui.QIcon("EntomoloGUI/media/icon.png"))
 
-        # specify the locations and size for each component
+        # specify the locations and size for each component (widget, row, column, row span, column span)
         self.grid.addWidget(self.piEyedPiper, 0, 0, 1, 5)
         self.grid.addWidget(self.canons, 1, 0, 1, 6)
         self.grid.addWidget(self.takePhotos, 2, 6, 1, 1)

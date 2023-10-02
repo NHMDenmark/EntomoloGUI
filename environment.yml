@@ -1,4 +1,4 @@
-name: entomologui
+name: LarsTest
 channels:
   - defaults
   - conda-forge
