@@ -44,6 +44,7 @@ class takePhotosGUI(basicGUI):
     def initUI(self):
         self.takePhotosButton = QtWidgets.QPushButton("Take Photos")
         self.takePhotosButton.clicked.connect(self.takePhotos)
+        self.takePhotosButton.setStyleSheet("background-color: #d6e6ff;")
 
         self.grid.addWidget(self.takePhotosButton, 0, 0, 10, 10)
         

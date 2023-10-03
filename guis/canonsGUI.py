@@ -28,7 +28,7 @@ class canonsGUI(basicGUI):
             "Attempt to Reinitialize Canon Cameras"
         )
         self.reinitCamerasButton.clicked.connect(self.reinitCameras)
-
+        self.reinitCamerasButton.setStyleSheet("background-color: #d6e6ff;")
         self.initUI()
 
     def initUI(self):

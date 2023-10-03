@@ -7,6 +7,8 @@ from utils import init_logger
 from guis.basicGUI import basicGUI
 from guis.canonsGUI import canonsGUI
 from guis.takePhotosGUI import takePhotosGUI
+from guis.shutdownGUI import ShutdownPiGUI
+from guis.shutdownGUI import ShutdownGuiGUI
 
 from guis.piEyedPiperGUI import piEyedPiperGUI
 from guis.progressDialog import progressDialog
@@ -51,6 +53,10 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.takePhotos = takePhotosGUI(STORAGE_PATH, threadpool=self.threadpool)
         # self.progress.update(100, "Grabbing Keys..")
 
+        self.shutdownPisButton = ShutdownPiGUI(threadpool=self.threadpool)
+
+        self.shutdownGuiButton = ShutdownGuiGUI(threadpool=self.threadpool)
+
         self.initUI()
 
         # self.progress._close()
@@ -61,11 +67,14 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         """
         self.setWindowTitle("EntomoloGUI")
         self.setWindowIcon(QtGui.QIcon("EntomoloGUI/media/icon.png"))
+        self.setStyleSheet("background-color: #ffffea;")
 
         # specify the locations and size for each component (widget, row, column, row span, column span)
         self.grid.addWidget(self.piEyedPiper, 0, 0, 1, 5)
         self.grid.addWidget(self.canons, 1, 0, 1, 6)
         self.grid.addWidget(self.takePhotos, 2, 6, 1, 1)
+        self.grid.addWidget(self.shutdownPisButton, 2, 0, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.shutdownGuiButton, 2, 1, 1, 1, alignment=QtCore.Qt.AlignLeft)
 
         self.setLayout(self.grid)
         self.show()
