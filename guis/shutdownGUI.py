@@ -1,7 +1,8 @@
 from guis.basicGUI import basicGUI
 import subprocess
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QMessageBox 
+from PyQt5.QtCore import QThread
 import os
 import signal
 import paramiko
@@ -22,18 +23,14 @@ class ShutdownPiGUI(basicGUI):
 
         self.setLayout(self.grid)
 
-    def shutdown_pieyes(self):
-
-        path_to_shutdown_script = "./shutdown.sh"
-
-        try:
-            # Execute the shell script using subprocess
-            subprocess.run(['sh', path_to_shutdown_script], check=True)
-        except subprocess.CalledProcessError as e:
-            QtWidgets.QMessageBox.critical(self, 'Error', f'Shell script failed with error: {str(e)}')
-
     def shutdown_pi(self):
         
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Warning)
+        msg_box.setWindowTitle("Process Running")
+        msg_box.setText("Click ok to start the process. Then please wait until all the pieyes have shutdown (up to 15 seconds)")
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec_()
         # Define your Raspberry Pi's SSH username and an array of hostnames
         USERNAME = "pi"
         PI_HOSTNAMES = ["pieye-ant.local", "pieye-beetle.local", "pieye-cicada.local", "pieye-dragonfly.local", "pieye-earwig.local"]
