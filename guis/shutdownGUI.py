@@ -1,8 +1,6 @@
 from guis.basicGUI import basicGUI
-import subprocess
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox 
-from PyQt5.QtCore import QThread
 import os
 import signal
 import paramiko

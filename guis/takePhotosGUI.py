@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtCore import QRunnable, pyqtSlot, QThreadPool
 
-
+from guis.cameraSetupGUI import JsonCameraSetting
 from guis.basicGUI import basicGUI
 from guis.workers import WorkerSignals
 from guis.progressDialog import progressDialog
@@ -92,6 +92,19 @@ class takePhotosGUI(basicGUI):
         canons = self.parent().canons.getCameras()
         pi_eyes = self.parent().piEyedPiper.getCameras()
         self.cameras = canons + pi_eyes
+
+        camerasToRemove = []
+
+        jsonCameraSetting = JsonCameraSetting()
+        setting = jsonCameraSetting.currentSetting
+
+        for camera in self.cameras:
+            
+            if setting[camera.camera_name] == False:
+                camerasToRemove.append(camera)
+        
+        for camera in camerasToRemove:
+            self.cameras.remove(camera)
 
         # dictionaries to store all results and status
         self.results = {}

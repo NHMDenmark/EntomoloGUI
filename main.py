@@ -7,8 +7,8 @@ from utils import init_logger
 from guis.basicGUI import basicGUI
 from guis.canonsGUI import canonsGUI
 from guis.takePhotosGUI import takePhotosGUI
-from guis.shutdownGUI import ShutdownPiGUI
-from guis.shutdownGUI import ShutdownGuiGUI
+from guis.shutdownGUI import ShutdownPiGUI, ShutdownGuiGUI
+from guis.cameraSetupGUI import CameraSetupGUI, SettingChooser, JsonCameraSetting
 
 from guis.piEyedPiperGUI import piEyedPiperGUI
 from guis.progressDialog import progressDialog
@@ -34,6 +34,8 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
     def __init__(self):
         super(entomoloGUI, self).__init__()
 
+        jcs = JsonCameraSetting()
+
         # Used to run worker threads in other guis
         self.threadpool = QThreadPool()
 
@@ -57,6 +59,10 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
 
         self.shutdownGuiButton = ShutdownGuiGUI(threadpool=self.threadpool)
 
+        self.chooseCamerasbutton = CameraSetupGUI(threadpool=self.threadpool)
+
+        self.dropdownMenuChooser = SettingChooser(threadpool=self.threadpool)
+
         self.initUI()
 
         # self.progress._close()
@@ -75,6 +81,8 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.grid.addWidget(self.takePhotos, 2, 6, 1, 1)
         self.grid.addWidget(self.shutdownPisButton, 2, 0, 1, 1, alignment=QtCore.Qt.AlignLeft)
         self.grid.addWidget(self.shutdownGuiButton, 2, 1, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.chooseCamerasbutton, 2, 3, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.dropdownMenuChooser, 0, 6, 1, 5)
 
         self.setLayout(self.grid)
         self.show()
