@@ -19,25 +19,25 @@ class canonsGUI(basicGUI):
 
     def __init__(self, **kwargs):
         super(canonsGUI, self).__init__(**kwargs)
-        self.inst_title = self.headerLabel("Fire the Canons!")
+        # self.inst_title = self.headerLabel("Fire the Canons!")
 
         self.topCanonGUI = canonGUI("Top", **kwargs)
         self.sideCanonGUI = canonGUI("Side", **kwargs)
 
         self.reinitCamerasButton = QtWidgets.QPushButton(
-            "Attempt to Reinitialize Canon Cameras"
+            "Reinitialize Canon Cameras"
         )
         self.reinitCamerasButton.clicked.connect(self.reinitCameras)
         self.reinitCamerasButton.setStyleSheet("background-color: #d6e6ff;")
         self.initUI()
 
     def initUI(self):
-        self.grid.addWidget(self.inst_title, 0, 0, 1, 1)
+        #self.grid.addWidget(self.inst_title, 0, 1, 1, 1)
 
         self.grid.addWidget(self.reinitCamerasButton, 0, 1, 1, 1)
-        self.setLayout(self.grid)
-        self.grid.addWidget(self.topCanonGUI, 1, 0, 1, 1)
-        self.grid.addWidget(self.sideCanonGUI, 1, 1, 1, 1)
+        self.setLayout(self.grid)  
+        self.grid.addWidget(self.topCanonGUI, 1, 1, 1, 6)
+        self.grid.addWidget(self.sideCanonGUI, 1, 12, 1, 6)
         self.setLayout(self.grid)
 
     def getCameras(self):
