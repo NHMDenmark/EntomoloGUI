@@ -1,4 +1,5 @@
 from guis.basicGUI import basicGUI
+from guis.piEyeGUI import piEyeGUI
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import * 
 import json
@@ -21,7 +22,7 @@ class CameraSetupGUI(basicGUI):
         
 
     def msg_box_checked_cameras(self):
-        
+        """
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Question)
         msg_box.setWindowTitle("Camera setup menu")
@@ -33,6 +34,30 @@ class CameraSetupGUI(basicGUI):
         
         msg_box.buttonClicked.connect(self.choice_director)
         msg_box.exec_()
+        """
+
+        self.dialogBox = QDialog()
+        self.dialogLayout = QVBoxLayout()
+        self.dialogBox.setLayout(self.dialogLayout)
+        
+        deleteButton = self.button_creator("Delete", self.delete_action)
+        self.dialogLayout.addWidget(deleteButton)
+
+        createButton = self.button_creator("New", self.create_action)
+        self.dialogLayout.addWidget(createButton)
+
+        cancelButton = self.button_creator("Cancel", self.cancel_action)
+        self.dialogLayout.addWidget(cancelButton)
+
+        self.dialogBox.resize(200, 200)
+
+        self.dialogBox.exec_()
+
+
+    def button_creator(self, text, action):
+        button = QPushButton(text)
+        button.clicked.connect(action)
+        return button
 
     def choice_director(self, button):
         if button.text() == "Delete":
@@ -40,6 +65,8 @@ class CameraSetupGUI(basicGUI):
         if button.text() == "New":
             self.create_action()
     
+    def cancel_action(self):
+        pass
         
     def create_action(self):
         print("create")
@@ -47,7 +74,7 @@ class CameraSetupGUI(basicGUI):
 
     def delete_action(self):
 
-
+        
 
 
 
@@ -76,14 +103,15 @@ class SettingChooser(basicGUI):
         for setting in self.settings:
             self.combobox.addItem(setting)
         
+        startIndex = self.combobox.currentIndex()
+        js.set_current_setting(startIndex)
+
         self.combobox.currentIndexChanged.connect(lambda index: js.set_current_setting(index))
 
         self.grid.addWidget(self.combobox)
 
         self.setLayout(self.grid)
 
-        
-        
 
 class JsonCameraSetting(basicGUI):
 
@@ -91,18 +119,28 @@ class JsonCameraSetting(basicGUI):
         
         self.settings = []
 
-        with open("../camera_settings.json", "r") as f:
+        with open("./camera_settings.json", "r") as f:
             self.settings = json.load(f)
 
-        self.currentSetting = self.settings["weird_test_bugs"]    
+        self.currentSetting = []
+
+        self.set_current_setting()    
         
 
     def update_json_camera_settings(self, dicts):
 
-        with open("../camera_settings.json", "w") as f:
+        with open("./camera_settings.json", "w") as f:
             json.dump(dicts)
     
-    def set_current_setting(self, index):
-        print(index)
-        #self.currentSetting = self.settings[index]   
-    
+    def set_current_setting(self, index = 0):
+
+        # Convert the keys into a list
+        keys_list = list(self.settings.keys())
+        
+        key = keys_list[index]
+
+        self.currentSetting = self.settings[key]   
+
+        print(self.currentSetting)
+
+        

@@ -4,6 +4,8 @@ import imageio
 import numpy as np
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QRunnable, pyqtSlot, QThreadPool
+from PyQt5.QtWidgets import QHBoxLayout
+
 import tempfile
 from pathlib import Path
 
@@ -12,7 +14,7 @@ from utils import try_url, make_x_image
 from guis.workers import WorkerSignals, previewWorker
 from guis.basicGUI import basicGUI, ClickableIMG
 from guis.bigPiEyePreviewGUI import bigPiEyePreviewGUI, bigPiEyePreviewWorker
-
+from guis.cameraSetupGUI import JsonCameraSetting
 
 class piEyeGUI(basicGUI):
     """
@@ -45,7 +47,22 @@ class piEyeGUI(basicGUI):
         return self.address
 
     def initUI(self):
+        
+        self.jcs = JsonCameraSetting()
+
+        self.setting = self.jcs.currentSetting[self.camera_name]
+
+        status = self.setting[self.camera_name]   
+
+        if status == False:
+            color = "red"
+        elif status == True:
+            color = "green"
+        
         self.title = QtWidgets.QLabel(f"{self.camera_name} Preview:")
+        self.status = QtWidgets.QLabel()
+        self.status.resize(3, 3)
+        self.status.setStyleSheet(f"border: 2px solid {color}; background-color: {color}; border-radius: 1px;")
 
         # The preview is a clickable image, so if you click the preview
         #   a new window will pop up, with a higher resolution slower version
@@ -53,9 +70,10 @@ class piEyeGUI(basicGUI):
         self.preview = ClickableIMG(self)
         self.preview.setMaximumSize(320, 240)
         self.preview.clicked.connect(self.openFocusedPreviewWindow)
-
-        self.grid.addWidget(self.title, 0, 0, 1, 1)
-        self.grid.addWidget(self.preview, 2, 0, 1, 1)
+        
+        self.grid.addWidget(self.status, 0, 0 , 1, 1)
+        self.grid.addWidget(self.title, 0, 1, 1, 2)
+        self.grid.addWidget(self.preview, 2, 0, 1, 4)
 
         self.setLayout(self.grid)
 
