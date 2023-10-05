@@ -1,5 +1,4 @@
 from guis.basicGUI import basicGUI
-from guis.piEyeGUI import piEyeGUI
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import * 
 import json

@@ -52,17 +52,19 @@ class piEyeGUI(basicGUI):
 
         self.setting = self.jcs.currentSetting[self.camera_name]
 
-        status = self.setting[self.camera_name]   
+        #self.status = self.setting[self.camera_name]   
 
-        if status == False:
-            color = "red"
-        elif status == True:
-            color = "green"
+        colorStatus = True
+
+        if colorStatus == False:
+            colorStatus = "red"
+        elif colorStatus == True:
+            colorStatus = "green"
         
         self.title = QtWidgets.QLabel(f"{self.camera_name} Preview:")
         self.status = QtWidgets.QLabel()
         self.status.resize(3, 3)
-        self.status.setStyleSheet(f"border: 2px solid {color}; background-color: {color}; border-radius: 1px;")
+        self.status.setStyleSheet(f"border: 2px solid {colorStatus}; background-color: {colorStatus}; border-radius: 1px;")
 
         # The preview is a clickable image, so if you click the preview
         #   a new window will pop up, with a higher resolution slower version
