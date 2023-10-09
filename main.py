@@ -9,11 +9,11 @@ from guis.canonsGUI import canonsGUI
 from guis.takePhotosGUI import takePhotosGUI
 from guis.shutdownGUI import ShutdownPiGUI, ShutdownGuiGUI
 from guis.cameraSetupGUI import CameraSetupGUI, SettingChooser, JsonCameraSetting
+from guis.cameraSettingBoxGUI import SettingCameraDisplayBox
 
 from guis.piEyedPiperGUI import piEyedPiperGUI
 from guis.progressDialog import progressDialog
 from guis.settings.settings import DEBUG, STORAGE_PATH
-
 
 class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
     """
@@ -55,13 +55,15 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.takePhotos = takePhotosGUI(STORAGE_PATH, threadpool=self.threadpool)
         # self.progress.update(100, "Grabbing Keys..")
 
-        self.shutdownPisButton = ShutdownPiGUI(threadpool=self.threadpool)
+        self.shutdownPisButton = ShutdownPiGUI()
 
-        self.shutdownGuiButton = ShutdownGuiGUI(threadpool=self.threadpool)
+        self.shutdownGuiButton = ShutdownGuiGUI()
 
-        self.chooseCamerasbutton = CameraSetupGUI(threadpool=self.threadpool)
+        self.chooseCamerasbutton = CameraSetupGUI()
 
-        self.dropdownMenuChooser = SettingChooser(threadpool=self.threadpool)
+        self.dropdownMenuCameras = SettingChooser()
+
+        self.pieyeActiveBox = SettingCameraDisplayBox()
 
         self.initUI()
 
@@ -76,20 +78,25 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.setStyleSheet("background-color: #ffffea;")
 
         # specify the locations and size for each component (widget, row, column, row span, column span)
-        self.grid.addWidget(self.piEyedPiper, 0, 0, 1, 5)
-        self.grid.addWidget(self.canons, 1, 0, 1, 6)
-        self.grid.addWidget(self.takePhotos, 2, 6, 1, 1)
-        self.grid.addWidget(self.shutdownPisButton, 2, 0, 1, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.shutdownGuiButton, 2, 1, 1, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.chooseCamerasbutton, 2, 3, 1, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.dropdownMenuChooser, 0, 6, 1, 5)
+        self.grid.addWidget(self.piEyedPiper, 0, 0, 20, 5)
+        self.grid.addWidget(self.canons, 21, 0, 50, 6)
+        self.grid.addWidget(self.takePhotos, 71, 6, 10, 1)
+        self.grid.addWidget(self.shutdownPisButton, 71, 0, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.shutdownGuiButton, 71, 1, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.chooseCamerasbutton, 71, 3, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.dropdownMenuCameras, 0, 6, 10, 5)
+        self.grid.addWidget(self.pieyeActiveBox, 19, 0, 1, 5)
+
 
         self.setLayout(self.grid)
+        
         self.show()
 
         topLeftPoint = QtWidgets.QApplication.desktop().availableGeometry().topLeft()
         self.move(topLeftPoint)
 
+    def update_settings(self):
+        self.piEyedPiper.grid.update()
 
 if __name__ == "__main__":
     init_logger(debug=DEBUG)

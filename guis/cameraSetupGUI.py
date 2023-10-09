@@ -1,4 +1,5 @@
 from guis.basicGUI import basicGUI
+from guis.cameraSettingBoxGUI import SettingCameraDisplayBox
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import * 
 import json
@@ -70,14 +71,12 @@ class CameraSetupGUI(basicGUI):
     def create_action(self):
         print("create")
         
+        SettingCameraDisplayBox.updateBox(SettingCameraDisplayBox, colorStatus = True, cameraName= "pieye-beetle.local")
+        
 
     def delete_action(self):
 
-        
-
-
-
-
+    
 
         jc = JsonCameraSetting()
 
@@ -111,7 +110,6 @@ class SettingChooser(basicGUI):
 
         self.setLayout(self.grid)
 
-
 class JsonCameraSetting(basicGUI):
 
     def __init__(self):
@@ -121,6 +119,8 @@ class JsonCameraSetting(basicGUI):
         with open("./camera_settings.json", "r") as f:
             self.settings = json.load(f)
 
+        self.scdb = SettingCameraDisplayBox()
+        
         self.currentSetting = []
 
         self.set_current_setting()    
@@ -139,6 +139,12 @@ class JsonCameraSetting(basicGUI):
         key = keys_list[index]
 
         self.currentSetting = self.settings[key]   
+
+        for cam in self.scdb.cameras:
+            setting = self.currentSetting[cam]
+
+            print(setting, cam)
+            self.scdb.updateBox(colorStatus=setting, cameraName=cam)
 
         print(self.currentSetting)
 

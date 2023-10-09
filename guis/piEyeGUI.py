@@ -4,7 +4,7 @@ import imageio
 import numpy as np
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QRunnable, pyqtSlot, QThreadPool
-from PyQt5.QtWidgets import QHBoxLayout
+from PyQt5.QtWidgets import QHBoxLayout, QApplication
 
 import tempfile
 from pathlib import Path
@@ -14,7 +14,7 @@ from utils import try_url, make_x_image
 from guis.workers import WorkerSignals, previewWorker
 from guis.basicGUI import basicGUI, ClickableIMG
 from guis.bigPiEyePreviewGUI import bigPiEyePreviewGUI, bigPiEyePreviewWorker
-from guis.cameraSetupGUI import JsonCameraSetting
+#from guis.cameraSetupGUI import JsonCameraSetting
 
 class piEyeGUI(basicGUI):
     """
@@ -40,6 +40,7 @@ class piEyeGUI(basicGUI):
         self.x = make_x_image(320, 240)
 
         self.initUI()
+
         self.startPreviewWorker()
 
     @property
@@ -48,24 +49,15 @@ class piEyeGUI(basicGUI):
 
     def initUI(self):
         
-        self.jcs = JsonCameraSetting()
+        #self.jcs = JsonCameraSetting()
 
-        self.setting = self.jcs.currentSetting[self.camera_name]
+        #self.setting = self.jcs.currentSetting[self.camera_name]
 
-        #self.status = self.setting[self.camera_name]   
+        #self.status = self.setting[self.camera_name]  
 
-        colorStatus = True
 
-        if colorStatus == False:
-            colorStatus = "red"
-        elif colorStatus == True:
-            colorStatus = "green"
+        self.title = QtWidgets.QLabel(f"{self.camera_name} view:")
         
-        self.title = QtWidgets.QLabel(f"{self.camera_name} Preview:")
-        self.status = QtWidgets.QLabel()
-        self.status.resize(3, 3)
-        self.status.setStyleSheet(f"border: 2px solid {colorStatus}; background-color: {colorStatus}; border-radius: 1px;")
-
         # The preview is a clickable image, so if you click the preview
         #   a new window will pop up, with a higher resolution slower version
         #   of the preview. This is to help with focussing the cameras.
@@ -73,9 +65,8 @@ class piEyeGUI(basicGUI):
         self.preview.setMaximumSize(320, 240)
         self.preview.clicked.connect(self.openFocusedPreviewWindow)
         
-        self.grid.addWidget(self.status, 0, 0 , 1, 1)
-        self.grid.addWidget(self.title, 0, 1, 1, 2)
-        self.grid.addWidget(self.preview, 2, 0, 1, 4)
+        self.grid.addWidget(self.title, 0, 0, 1, 2)
+        self.grid.addWidget(self.preview, 2, 0, 1, 4)        
 
         self.setLayout(self.grid)
 
