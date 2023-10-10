@@ -16,6 +16,41 @@
         "pieye-earwig.local" : true,
         "Top" : true,
         "Side" : true
+    },
+    "weirdy_test_bugs" : {
+        "pieye-ant.local" : true,
+        "pieye-beetle.local" : true,
+        "pieye-cicada.local" : false,
+        "pieye-dragonfly.local" : false,
+        "pieye-earwig.local" : true,
+        "Top" : true,
+        "Side" : true
+    },
+    "weoooird_test_bugs" : {
+        "pieye-ant.local" : true,
+        "pieye-beetle.local" : true,
+        "pieye-cicada.local" : false,
+        "pieye-dragonfly.local" : false,
+        "pieye-earwig.local" : true,
+        "Top" : true,
+        "Side" : true
+    },
+    "wasdeird_test_bugs" : {
+        "pieye-ant.local" : true,
+        "pieye-beetle.local" : true,
+        "pieye-cicada.local" : false,
+        "pieye-dragonfly.local" : false,
+        "pieye-earwig.local" : true,
+        "Top" : true,
+        "Side" : true
+    },
+    "woooooooooooooeird_test_bugs" : {
+        "pieye-ant.local" : true,
+        "pieye-beetle.local" : true,
+        "pieye-cicada.local" : false,
+        "pieye-dragonfly.local" : false,
+        "pieye-earwig.local" : true,
+        "Top" : true,
+        "Side" : true
     }
-
 }

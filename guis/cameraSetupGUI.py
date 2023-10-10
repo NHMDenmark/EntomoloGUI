@@ -9,6 +9,9 @@ class CameraSetupGUI(basicGUI):
     def __init__(self, **kwargs):
         super(CameraSetupGUI, self).__init__(**kwargs)
         
+        
+        self.sc = SettingChooser()
+        self.js = self.sc.js
         self.initUI()
     
     def initUI(self):
@@ -40,10 +43,10 @@ class CameraSetupGUI(basicGUI):
         self.dialogLayout = QVBoxLayout()
         self.dialogBox.setLayout(self.dialogLayout)
         
-        deleteButton = self.button_creator("Delete", self.delete_action)
+        deleteButton = self.button_creator("Delete setting", self.delete_action)
         self.dialogLayout.addWidget(deleteButton)
 
-        createButton = self.button_creator("New", self.create_action)
+        createButton = self.button_creator("New setting", self.create_action)
         self.dialogLayout.addWidget(createButton)
 
         cancelButton = self.button_creator("Cancel", self.cancel_action)
@@ -59,61 +62,125 @@ class CameraSetupGUI(basicGUI):
         button.clicked.connect(action)
         return button
 
-    def choice_director(self, button):
-        if button.text() == "Delete":
-            self.delete_action()
-        if button.text() == "New":
-            self.create_action()
+    def cancel_action_delete(self):
+        self.dialogBoxDelete.close()
     
     def cancel_action(self):
-        pass
+        self.dialogBox.close()
         
     def create_action(self):
         print("create")
-        
-        SettingCameraDisplayBox.updateBox(SettingCameraDisplayBox, colorStatus = True, cameraName= "pieye-beetle.local")
+        self.dialogBox.close()
+
         
 
     def delete_action(self):
+        self.dialogBox.close()
 
-    
+        self.dialogBoxDelete = QDialog()
+        self.dialogLayoutDelete = QVBoxLayout()
+        self.dialogBoxDelete.setLayout(self.dialogLayoutDelete)
 
-        jc = JsonCameraSetting()
+        self.label = QtWidgets.QLabel("Choose a setting:")
+        self.comboboxDelete = QComboBox()
+        self.comboboxDelete.setStyleSheet("background-color: #d6e6ff;")
+        
+        
+        self.settingsDelete = self.js.settings
 
-        print(jc.settings.keys())
+        for setting in self.settingsDelete:
+            self.comboboxDelete.addItem(setting)
+        
+        self.comboboxDelete.removeItem(0)
+
+        setattr(CameraSetupGUI ,"indexToBeDeleted", (self.comboboxDelete.currentIndex() + 1))
+
+        self.comboboxDelete.currentIndexChanged.connect(lambda index: self.set_index_to_be_deleted(index))
+
+        self.dialogLayoutDelete.addWidget(self.comboboxDelete)
+
+        createButton = self.button_creator("Delete setting", self.delete_setting)
+        self.dialogLayoutDelete.addWidget(createButton)
+
+        cancelButton = self.button_creator("Cancel", self.cancel_action_delete)
+        self.dialogLayoutDelete.addWidget(cancelButton)
+
+        self.dialogBoxDelete.resize(200, 200)
+
+        self.dialogBoxDelete.exec_()
+
+    def set_index_to_be_deleted(self, index):
+        setattr(CameraSetupGUI ,"indexToBeDeleted", (index + 1))
+        print("index:", index +1)
+
+    def delete_setting(self):
+        
+        self.js.delete_setting(getattr(self, "indexToBeDeleted"))
+
+        
+        self.sc.update_setting_chooser()
+        self.dialogBoxDelete.close()
 
 class SettingChooser(basicGUI):
 
     def __init__(self, **kwargs):
         super(SettingChooser, self).__init__(**kwargs)
         
+        self.js = JsonCameraSetting()
+        print("check")
+        box = QComboBox()
+        setattr(SettingChooser, "grid", self.grid)
+        setattr(SettingChooser, "combobox", box)
+
         self.initUI()
     
     def initUI(self):
 
         self.label = QtWidgets.QLabel("Camera setup options:")
-        self.combobox = QComboBox()
-        self.combobox.setStyleSheet("background-color: #d6e6ff;")
+        # self.combobox = QComboBox()
+        getattr(self, "combobox").setStyleSheet("background-color: #d6e6ff;")
         
-        js = JsonCameraSetting()
-        self.settings = js.settings
+        
+        self.settings = self.js.settings
 
         for setting in self.settings:
-            self.combobox.addItem(setting)
+            getattr(self, "combobox").addItem(setting)
         
-        startIndex = self.combobox.currentIndex()
-        js.set_current_setting(startIndex)
+        startIndex = getattr(self, "combobox").currentIndex()
+        self.js.set_current_setting(startIndex)
 
-        self.combobox.currentIndexChanged.connect(lambda index: js.set_current_setting(index))
+        SettingChooser.combobox.currentIndexChanged.connect(lambda index: self.js.set_current_setting(index))
 
-        self.grid.addWidget(self.combobox)
+        SettingChooser.grid.addWidget(getattr(self, "combobox"))
 
-        self.setLayout(self.grid)
+        self.setLayout(getattr(self, "grid"))
+
+    def update_setting_chooser(self):
+        
+        
+        SettingChooser.grid.removeWidget(SettingChooser.combobox)
+        box = QComboBox()
+        setattr(SettingChooser, "combobox", box)
+        getattr(self, "combobox").setStyleSheet("background-color: #d6e6ff;")
+
+        self.settings = self.js.settings
+
+        for setting in self.settings:
+            getattr(self, "combobox").addItem(setting)
+
+        SettingChooser.combobox.currentIndexChanged.connect(lambda index: self.js.set_current_setting(index))
+
+        SettingChooser.grid.addWidget(getattr(self, "combobox"))
+
+        SettingChooser.grid.update()
+        self.js.set_current_setting(0)
 
 class JsonCameraSetting(basicGUI):
 
     def __init__(self):
         
+        print("json init")
+
         self.settings = []
 
         with open("./camera_settings.json", "r") as f:
@@ -129,7 +196,7 @@ class JsonCameraSetting(basicGUI):
     def update_json_camera_settings(self, dicts):
 
         with open("./camera_settings.json", "w") as f:
-            json.dump(dicts)
+            json.dump(dicts, f)
     
     def set_current_setting(self, index = 0):
 
@@ -146,6 +213,17 @@ class JsonCameraSetting(basicGUI):
             print(setting, cam)
             self.scdb.updateBox(colorStatus=setting, cameraName=cam)
 
-        print(self.currentSetting)
+        #print(self.currentSetting)
 
-        
+    def delete_setting(self, index_to_delete):
+        keys_list = list(self.settings.keys())
+    
+        if 0 <= index_to_delete < len(keys_list):
+            key_to_delete = keys_list[index_to_delete]
+            del self.settings[key_to_delete]
+            self.update_json_camera_settings(self.settings)
+            print(f"Setting at index {index_to_delete} deleted.")
+        else:
+            print(f"Invalid index: {index_to_delete}")
+
+         
