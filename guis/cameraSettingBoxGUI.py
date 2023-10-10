@@ -27,10 +27,10 @@ class SettingCameraDisplayBox(basicGUI):
                 
                 setattr(SettingCameraDisplayBox, f"{cam}", QtWidgets.QLabel())
                 
-                getattr(SettingCameraDisplayBox, cam).setMaximumWidth(11)
-                getattr(SettingCameraDisplayBox, cam).setMaximumHeight(11)
+                getattr(SettingCameraDisplayBox, cam).setMaximumWidth(9)
+                getattr(SettingCameraDisplayBox, cam).setMaximumHeight(9)
 
-                getattr(SettingCameraDisplayBox, cam).setStyleSheet(f"border: 2px solid {SettingCameraDisplayBox.colorStatus}; background-color: {SettingCameraDisplayBox.colorStatus};")
+                getattr(SettingCameraDisplayBox, cam).setStyleSheet(f"border: 2px solid {SettingCameraDisplayBox.colorStatus}; background-color: {SettingCameraDisplayBox.colorStatus}; border-radius: 1px;")
                 
                 SettingCameraDisplayBox.grid.addWidget(getattr(SettingCameraDisplayBox, cam), 0, i, 0, 1, QtCore.Qt.AlignLeft)
 

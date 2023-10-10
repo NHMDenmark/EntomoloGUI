@@ -1,5 +1,5 @@
 {
-    "default_camera_settings" : {
+    "default_camera_setting" : {
         "pieye-ant.local" : true,
         "pieye-beetle.local" : true,
         "pieye-cicada.local" : true,
@@ -13,12 +13,12 @@
         "pieye-beetle.local" : true,
         "pieye-cicada.local" : false,
         "pieye-dragonfly.local" : false,
-        "pieye-earwig.local" : true,
-        "Top" : true,
+        "pieye-earwig.local" : false,
+        "Top" : false,
         "Side" : true
     },
     "weirdy_test_bugs" : {
-        "pieye-ant.local" : true,
+        "pieye-ant.local" : false,
         "pieye-beetle.local" : true,
         "pieye-cicada.local" : false,
         "pieye-dragonfly.local" : false,
@@ -27,9 +27,9 @@
         "Side" : true
     },
     "weoooird_test_bugs" : {
-        "pieye-ant.local" : true,
+        "pieye-ant.local" : false,
         "pieye-beetle.local" : true,
-        "pieye-cicada.local" : false,
+        "pieye-cicada.local" : true,
         "pieye-dragonfly.local" : false,
         "pieye-earwig.local" : true,
         "Top" : true,
