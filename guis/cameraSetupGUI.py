@@ -9,14 +9,13 @@ class CameraSetupGUI(basicGUI):
     def __init__(self, **kwargs):
         super(CameraSetupGUI, self).__init__(**kwargs)
         
-        
         self.sc = SettingChooser()
         self.js = self.sc.js
         self.initUI()
     
     def initUI(self):
         
-        self.chooseCamerasButton = QtWidgets.QPushButton("Choose cameras")
+        self.chooseCamerasButton = QtWidgets.QPushButton("Settings")
         self.chooseCamerasButton.clicked.connect(self.msg_box_checked_cameras)
         self.chooseCamerasButton.setStyleSheet("background-color: #d6e6ff;")
         self.grid.addWidget(self.chooseCamerasButton)
@@ -25,19 +24,6 @@ class CameraSetupGUI(basicGUI):
         
 
     def msg_box_checked_cameras(self):
-        """
-        msg_box = QMessageBox()
-        msg_box.setIcon(QMessageBox.Question)
-        msg_box.setWindowTitle("Camera setup menu")
-        msg_box.setText("Create or delete a camera setting.")
-        
-        msg_box.addButton("Cancel", QMessageBox.RejectRole)
-        msg_box.addButton("Delete", QMessageBox.AcceptRole)
-        msg_box.addButton("New", QMessageBox.YesRole)
-        
-        msg_box.buttonClicked.connect(self.choice_director)
-        msg_box.exec_()
-        """
 
         self.dialogBox = QDialog()
         self.dialogLayout = QVBoxLayout()
@@ -65,14 +51,90 @@ class CameraSetupGUI(basicGUI):
     def cancel_action_delete(self):
         self.dialogBoxDelete.close()
     
+    def cancel_action_create(self):
+        self.dialogBoxCreate.close()
+    
     def cancel_action(self):
         self.dialogBox.close()
         
     def create_action(self):
-        print("create")
         self.dialogBox.close()
 
-        
+        self.dialogBoxCreate = QDialog()
+        self.dialogLayoutCreate = QVBoxLayout()
+        self.dialogBoxCreate.setLayout(self.dialogLayoutCreate)
+
+        self.labelCreateCameras = QtWidgets.QLabel("Add cameras to new setting:")
+        self.dialogLayoutCreate.addWidget(self.labelCreateCameras)
+
+        self.checkAnt = QCheckBox("pieye-ant")
+        self.dialogLayoutCreate.addWidget(self.checkAnt)
+        self.checkBeetle = QCheckBox("pieye-beetle")
+        self.dialogLayoutCreate.addWidget(self.checkBeetle)
+        self.checkCicada = QCheckBox("pieye-cicada")
+        self.dialogLayoutCreate.addWidget(self.checkCicada)
+        self.checkDragonfly = QCheckBox("pieye-dragonfly")
+        self.dialogLayoutCreate.addWidget(self.checkDragonfly)
+        self.checkEarwig = QCheckBox("pieye-earwig")
+        self.dialogLayoutCreate.addWidget(self.checkEarwig)
+        self.checkTop = QCheckBox("Canon Top")
+        self.dialogLayoutCreate.addWidget(self.checkTop)
+        self.checkSide = QCheckBox("Canon Side")
+        self.dialogLayoutCreate.addWidget(self.checkSide)
+        #self.checkAnt.isChecked()
+
+        self.inputName = QLineEdit()
+        self.inputName.setPlaceholderText("Choose a name for the new setting")
+        self.dialogLayoutCreate.addWidget(self.inputName)
+        #text = self.inputName.text()
+
+        createButton = self.button_creator("Add new setting", self.create_setting)
+        self.dialogLayoutCreate.addWidget(createButton)
+
+        cancelButton = self.button_creator("Cancel", self.cancel_action_create)
+        self.dialogLayoutCreate.addWidget(cancelButton)
+
+        self.dialogBoxCreate.resize(300, 200)
+        self.dialogBoxCreate.exec_()
+
+    def create_setting(self):
+
+        self.dialogBoxCreate.close()
+
+        if self.inputName.text() is not "":
+            
+            self.newSetting = {
+                self.inputName.text(): {
+                "pieye-ant.local": self.checkAnt.isChecked(),
+                "pieye-beetle.local": self.checkBeetle.isChecked(),
+                "pieye-cicada.local": self.checkCicada.isChecked(),
+                "pieye-dragonfly.local": self.checkDragonfly.isChecked(),
+                "pieye-earwig.local": self.checkEarwig.isChecked(),
+                "Top": self.checkTop.isChecked(),
+                "Side": self.checkSide.isChecked()
+                }
+                }
+
+            self.js.settings.update(self.newSetting)
+
+            self.js.update_json_camera_settings(self.js.settings)
+
+            self.sc.update_setting_chooser()
+
+            self.acceptCreateMsgBox = QMessageBox()
+
+            self.acceptCreateMsgBox.setText("New setting created")
+            self.acceptCreateMsgBox.addButton(QMessageBox.Ok)
+
+            self.acceptCreateMsgBox.exec_()
+        elif self.inputName.text() is "":
+
+            self.acceptCreateMsgBox = QMessageBox()
+
+            self.acceptCreateMsgBox.setText("Setting name is required")
+            self.acceptCreateMsgBox.addButton(QMessageBox.Ok)
+
+            self.acceptCreateMsgBox.exec_()
 
     def delete_action(self):
         self.dialogBox.close()
@@ -81,10 +143,11 @@ class CameraSetupGUI(basicGUI):
         self.dialogLayoutDelete = QVBoxLayout()
         self.dialogBoxDelete.setLayout(self.dialogLayoutDelete)
 
-        self.label = QtWidgets.QLabel("Choose a setting:")
+        self.label = QtWidgets.QLabel("Choose a setting to delete:")
         self.comboboxDelete = QComboBox()
         self.comboboxDelete.setStyleSheet("background-color: #d6e6ff;")
         
+        self.dialogLayoutDelete.addWidget(self.label)
         
         self.settingsDelete = self.js.settings
 
@@ -98,6 +161,9 @@ class CameraSetupGUI(basicGUI):
         self.comboboxDelete.currentIndexChanged.connect(lambda index: self.set_index_to_be_deleted(index))
 
         self.dialogLayoutDelete.addWidget(self.comboboxDelete)
+
+        self.labelEmpty = QtWidgets.QLabel()
+        self.dialogLayoutDelete.addWidget(self.labelEmpty)
 
         createButton = self.button_creator("Delete setting", self.delete_setting)
         self.dialogLayoutDelete.addWidget(createButton)
@@ -117,7 +183,6 @@ class CameraSetupGUI(basicGUI):
         
         self.js.delete_setting(getattr(self, "indexToBeDeleted"))
 
-        
         self.sc.update_setting_chooser()
         self.dialogBoxDelete.close()
 
@@ -127,7 +192,7 @@ class SettingChooser(basicGUI):
         super(SettingChooser, self).__init__(**kwargs)
         
         self.js = JsonCameraSetting()
-        print("check")
+        
         box = QComboBox()
         setattr(SettingChooser, "grid", self.grid)
         setattr(SettingChooser, "combobox", box)
@@ -156,7 +221,6 @@ class SettingChooser(basicGUI):
         self.setLayout(getattr(self, "grid"))
 
     def update_setting_chooser(self):
-        
         
         SettingChooser.grid.removeWidget(SettingChooser.combobox)
         box = QComboBox()
@@ -188,9 +252,7 @@ class JsonCameraSetting(basicGUI):
 
         self.scdb = SettingCameraDisplayBox()
         
-        self.currentSetting = []
-
-        self.set_current_setting()    
+        self.currentSetting = self.set_current_setting()   
         
 
     def update_json_camera_settings(self, dicts):
