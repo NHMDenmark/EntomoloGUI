@@ -39,10 +39,10 @@ class ShutdownPiGUI(basicGUI):
         # Set a timeout value for the SSH connection attempt (adjust as needed)
         SSH_TIMEOUT = 3    
         # Loop through the hostnames and shut down each Raspberry Pi
-        print(button.text())
+        
 
         if button.text() == "&Yes":
-            print("check")
+            
             for hostname in PI_HOSTNAMES:
                 try:
                     # Create an SSH client instance
