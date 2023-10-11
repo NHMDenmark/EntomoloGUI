@@ -241,18 +241,19 @@ class SettingChooser(basicGUI):
 
 class JsonCameraSetting(basicGUI):
 
-    def __init__(self):
-        
+    def __init__(self, **kwargs):
+        super(JsonCameraSetting, self).__init__(**kwargs)
         print("json init")
 
         self.settings = []
 
         with open("./camera_settings.json", "r") as f:
             self.settings = json.load(f)
+            
 
         self.scdb = SettingCameraDisplayBox()
         
-        self.currentSetting = self.set_current_setting()   
+        self.set_current_setting()
         
 
     def update_json_camera_settings(self, dicts):
@@ -267,7 +268,7 @@ class JsonCameraSetting(basicGUI):
         
         key = keys_list[index]
 
-        self.currentSetting = self.settings[key]   
+        setattr(JsonCameraSetting, "currentSetting", self.settings[key])   
 
         for cam in self.scdb.cameras:
             setting = self.currentSetting[cam]

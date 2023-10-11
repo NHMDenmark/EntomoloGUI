@@ -81,10 +81,10 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.grid.addWidget(self.piEyedPiper, 0, 0, 20, 5)
         self.grid.addWidget(self.canons, 21, 0, 50, 6)
         self.grid.addWidget(self.takePhotos, 71, 6, 10, 1)
-        self.grid.addWidget(self.shutdownPisButton, 71, 0, 10, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.shutdownGuiButton, 71, 1, 10, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.chooseCamerasbutton, 71, 3, 10, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.dropdownMenuCameras, 0, 6, 10, 5)
+        self.grid.addWidget(self.shutdownPisButton, 64, 0, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.shutdownGuiButton, 64, 1, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.chooseCamerasbutton, 64, 3, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.dropdownMenuCameras, 64, 4, 10, 5, alignment=QtCore.Qt.AlignLeft)
         self.grid.addWidget(self.pieyeActiveBox, 19, 0, 1, 5)
 
 

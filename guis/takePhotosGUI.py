@@ -35,7 +35,7 @@ class takePhotosGUI(basicGUI):
             ),  # Sound Byte from https://freesound.org/people/Walter_Odington/sounds/25616/
         }
 
-        
+        self.jcs= JsonCameraSetting()
         self.storage_path = Path(storage_path)
         self.initUI()
         self.take_photos_timings = []
@@ -95,11 +95,12 @@ class takePhotosGUI(basicGUI):
 
         camerasToRemove = []
 
-        jsonCameraSetting = JsonCameraSetting()
-        setting = jsonCameraSetting.currentSetting
-
+        
+        setting = getattr(self.jcs, "currentSetting")
+        print(setting)
+        
         for camera in self.cameras:
-            
+            print(camera)
             if setting[camera.camera_name] == False:
                 camerasToRemove.append(camera)
         
