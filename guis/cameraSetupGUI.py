@@ -81,12 +81,10 @@ class CameraSetupGUI(basicGUI):
         self.dialogLayoutCreate.addWidget(self.checkTop)
         self.checkSide = QCheckBox("Canon Side")
         self.dialogLayoutCreate.addWidget(self.checkSide)
-        #self.checkAnt.isChecked()
 
         self.inputName = QLineEdit()
         self.inputName.setPlaceholderText("Choose a name for the new setting")
         self.dialogLayoutCreate.addWidget(self.inputName)
-        #text = self.inputName.text()
 
         createButton = self.button_creator("Add new setting", self.create_setting)
         self.dialogLayoutCreate.addWidget(createButton)
@@ -276,6 +274,11 @@ class JsonCameraSetting(basicGUI):
             print(setting, cam)
             self.scdb.updateBox(colorStatus=setting, cameraName=cam)
 
+        for cam in self.scdb.canons:
+            setting = self.currentSetting[cam]
+
+            print(setting, cam)
+            self.scdb.updateBox(colorStatus=setting, cameraName=cam)
         #print(self.currentSetting)
 
     def delete_setting(self, index_to_delete):

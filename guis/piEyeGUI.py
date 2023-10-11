@@ -55,8 +55,9 @@ class piEyeGUI(basicGUI):
 
         #self.status = self.setting[self.camera_name]  
 
+        viewName = f"{self.camera_name[:-6]} view:"
 
-        self.title = QtWidgets.QLabel(f"{self.camera_name} view:")
+        self.title = QtWidgets.QLabel(viewName)
         
         # The preview is a clickable image, so if you click the preview
         #   a new window will pop up, with a higher resolution slower version

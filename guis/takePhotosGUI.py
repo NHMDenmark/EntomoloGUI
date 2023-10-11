@@ -42,10 +42,12 @@ class takePhotosGUI(basicGUI):
         self.save_photos_timings = []
 
     def initUI(self):
-        self.takePhotosButton = QtWidgets.QPushButton("Take Photos")
+        self.takePhotosButton = QtWidgets.QPushButton(" Take Photo(s) ")
         self.takePhotosButton.clicked.connect(self.takePhotos)
-        self.takePhotosButton.setStyleSheet("background-color: #d6e6ff;")
-
+        self.takePhotosButton.setStyleSheet("background-color: #caffbf;")
+        self.takePhotosButton.setFixedSize(90, 30)
+        # self.takePhotosButton.setStyleSheet("background-color: #caffbf; border-radius: 25px;")
+        
         self.grid.addWidget(self.takePhotosButton, 0, 0, 10, 10)
         
         self.setLayout(self.grid)

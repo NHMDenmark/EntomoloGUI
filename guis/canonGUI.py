@@ -76,15 +76,7 @@ class canonGUI(basicGUI):
         self.preview.setMaximumSize(640, 420)
         self.preview.clicked.connect(self.openIMG)
 
-        self.colorStatus = "blue"
-
-        self.status = QtWidgets.QLabel()
-        self.status.setMaximumWidth(9)
-        self.status.setMaximumHeight(9)        
-        self.status.setStyleSheet(f"border: 2px solid {self.colorStatus}; background-color: {self.colorStatus}; border-radius: 1px;")
-
-        self.grid.addWidget(self.status, 0, 0, 1, 1)
-        self.grid.addWidget(self.title, 0, 1, 1, 2)
+        self.grid.addWidget(self.title, 0, 0, 1, 2)
         self.grid.addWidget(self.preview, 2, 0, 1, 8)
 
         self.setLayout(self.grid)

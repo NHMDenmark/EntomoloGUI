@@ -77,7 +77,7 @@ class ShutdownGuiGUI(basicGUI):
 
     def initUI(self):
         
-        self.shutdownGuiButton = QtWidgets.QPushButton("Shutdown program")
+        self.shutdownGuiButton = QtWidgets.QPushButton("Shutdown Program")
         self.shutdownGuiButton.clicked.connect(self.msg_box_gui)
         self.shutdownGuiButton.setStyleSheet("background-color: #d6e6ff;")
         self.grid.addWidget(self.shutdownGuiButton, 0, 0, 9, 9)

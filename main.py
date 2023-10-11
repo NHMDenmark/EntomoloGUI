@@ -78,14 +78,14 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.setStyleSheet("background-color: #ffffea;")
 
         # specify the locations and size for each component (widget, row, column, row span, column span)
-        self.grid.addWidget(self.piEyedPiper, 0, 0, 20, 5)
+        self.grid.addWidget(self.piEyedPiper, 0, 0, 20, 6)
         self.grid.addWidget(self.canons, 21, 0, 50, 6)
-        self.grid.addWidget(self.takePhotos, 71, 6, 10, 1)
+        self.grid.addWidget(self.takePhotos, 64, 6, 10, 1)
         self.grid.addWidget(self.shutdownPisButton, 64, 0, 10, 1, alignment=QtCore.Qt.AlignLeft)
         self.grid.addWidget(self.shutdownGuiButton, 64, 1, 10, 1, alignment=QtCore.Qt.AlignLeft)
         self.grid.addWidget(self.chooseCamerasbutton, 64, 3, 10, 1, alignment=QtCore.Qt.AlignLeft)
         self.grid.addWidget(self.dropdownMenuCameras, 64, 4, 10, 5, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.pieyeActiveBox, 19, 0, 1, 5)
+        self.grid.addWidget(self.pieyeActiveBox, 50, 6, 20, 1)
 
 
         self.setLayout(self.grid)
