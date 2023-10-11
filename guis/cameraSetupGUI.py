@@ -84,6 +84,7 @@ class CameraSetupGUI(basicGUI):
 
         self.inputName = QLineEdit()
         self.inputName.setPlaceholderText("Choose a name for the new setting")
+        self.inputName.setMaxLength(20)
         self.dialogLayoutCreate.addWidget(self.inputName)
 
         createButton = self.button_creator("Add new setting", self.create_setting)
@@ -99,7 +100,7 @@ class CameraSetupGUI(basicGUI):
 
         self.dialogBoxCreate.close()
 
-        if self.inputName.text() is not "":
+        if self.inputName.text() != "":
             
             self.newSetting = {
                 self.inputName.text(): {
@@ -125,7 +126,7 @@ class CameraSetupGUI(basicGUI):
             self.acceptCreateMsgBox.addButton(QMessageBox.Ok)
 
             self.acceptCreateMsgBox.exec_()
-        elif self.inputName.text() is "":
+        elif self.inputName.text() == "":
 
             self.acceptCreateMsgBox = QMessageBox()
 
@@ -143,7 +144,7 @@ class CameraSetupGUI(basicGUI):
 
         self.label = QtWidgets.QLabel("Choose a setting to delete:")
         self.comboboxDelete = QComboBox()
-        self.comboboxDelete.setStyleSheet("background-color: #d6e6ff;")
+        self.comboboxDelete.setStyleSheet("background-color: #d6e6ff; min-width: 120px;")
         
         self.dialogLayoutDelete.addWidget(self.label)
         
@@ -175,7 +176,7 @@ class CameraSetupGUI(basicGUI):
 
     def set_index_to_be_deleted(self, index):
         setattr(CameraSetupGUI ,"indexToBeDeleted", (index + 1))
-        print("index:", index +1)
+        #print("index:", index +1)
 
     def delete_setting(self):
         
@@ -201,7 +202,7 @@ class SettingChooser(basicGUI):
 
         self.label = QtWidgets.QLabel("Camera setup options:")
         # self.combobox = QComboBox()
-        getattr(self, "combobox").setStyleSheet("background-color: #d6e6ff;")
+        getattr(self, "combobox").setStyleSheet("background-color: #d6e6ff; min-width: 190px;")
         
         
         self.settings = self.js.settings
@@ -241,7 +242,7 @@ class JsonCameraSetting(basicGUI):
 
     def __init__(self, **kwargs):
         super(JsonCameraSetting, self).__init__(**kwargs)
-        print("json init")
+        #print("json init")
 
         self.settings = []
 
@@ -271,13 +272,13 @@ class JsonCameraSetting(basicGUI):
         for cam in self.scdb.cameras:
             setting = self.currentSetting[cam]
 
-            print(setting, cam)
+            #print(setting, cam)
             self.scdb.updateBox(colorStatus=setting, cameraName=cam)
 
         for cam in self.scdb.canons:
             setting = self.currentSetting[cam]
 
-            print(setting, cam)
+            #print(setting, cam)
             self.scdb.updateBox(colorStatus=setting, cameraName=cam)
         #print(self.currentSetting)
 

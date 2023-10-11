@@ -61,7 +61,7 @@ class SettingCameraDisplayBox(basicGUI):
                 t += 1
 
                 self.setLayout(SettingCameraDisplayBox.grid)
-                print(cam)
+                #print(cam)
 
 
 
