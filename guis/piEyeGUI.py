@@ -9,12 +9,10 @@ from PyQt5.QtWidgets import QHBoxLayout, QApplication
 import tempfile
 from pathlib import Path
 
-
 from utils import try_url, make_x_image
 from guis.workers import WorkerSignals, previewWorker
 from guis.basicGUI import basicGUI, ClickableIMG
 from guis.bigPiEyePreviewGUI import bigPiEyePreviewGUI, bigPiEyePreviewWorker
-#from guis.cameraSetupGUI import JsonCameraSetting
 
 class piEyeGUI(basicGUI):
     """
@@ -48,12 +46,7 @@ class piEyeGUI(basicGUI):
         return self.address
 
     def initUI(self):
-        
-        #self.jcs = JsonCameraSetting()
-
-        #self.setting = self.jcs.currentSetting[self.camera_name]
-
-        #self.status = self.setting[self.camera_name]  
+         
 
         viewName = f"{self.camera_name[:-6]} view:"
 

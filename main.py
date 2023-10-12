@@ -55,14 +55,19 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         self.takePhotos = takePhotosGUI(STORAGE_PATH, threadpool=self.threadpool)
         # self.progress.update(100, "Grabbing Keys..")
 
+        # shut down the raspberry pis
         self.shutdownPisButton = ShutdownPiGUI()
 
+        # shut down the app
         self.shutdownGuiButton = ShutdownGuiGUI()
 
+        # menu for configuring camera settings
         self.chooseCamerasbutton = CameraSetupGUI()
 
+        # ui for choosing camera setting
         self.dropdownMenuCameras = SettingChooser()
 
+        # controlling the "which camera is active" box
         self.pieyeActiveBox = SettingCameraDisplayBox()
 
         self.initUI()

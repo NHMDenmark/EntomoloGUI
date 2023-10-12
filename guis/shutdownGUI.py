@@ -6,7 +6,9 @@ import signal
 import paramiko
 
 class ShutdownPiGUI(basicGUI):
-
+    """
+        Takes care of shutting down the Raspberry pis by ssh'ing into them and then shutting them down
+    """
     def __init__(self, **kwargs):
         super(ShutdownPiGUI, self).__init__(**kwargs)
         
@@ -22,6 +24,9 @@ class ShutdownPiGUI(basicGUI):
         self.setLayout(self.grid)
 
     def msg_box_pi(self):
+        """
+        Creates a msg box prompting whether to shut down the raspberry pis
+        """
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Question)
         msg_box.setWindowTitle("Process Running")
@@ -31,15 +36,16 @@ class ShutdownPiGUI(basicGUI):
         msg_box.exec_()
 
     def shutdown_pi(self, button):
-
+        """
+        Shutting down the raspberry pis
+        """
         # Define your Raspberry Pi's SSH username and an array of hostnames
         USERNAME = "pi"
         PI_HOSTNAMES = ["pieye-ant.local", "pieye-beetle.local", "pieye-cicada.local", "pieye-dragonfly.local", "pieye-earwig.local"]
 
-        # Set a timeout value for the SSH connection attempt (adjust as needed)
+        # Set a timeout value for the SSH connection attempt
         SSH_TIMEOUT = 3    
-        # Loop through the hostnames and shut down each Raspberry Pi
-        
+        # Loop through the hostnames and shut down each Raspberry Pi        
 
         if button.text() == "&Yes":
             
@@ -69,7 +75,9 @@ class ShutdownPiGUI(basicGUI):
         
 
 class ShutdownGuiGUI(basicGUI):
-
+    """
+        Takes care of shutting down the app
+    """
     def __init__(self, **kwargs):
         super(ShutdownGuiGUI, self).__init__(**kwargs)
         
@@ -85,6 +93,9 @@ class ShutdownGuiGUI(basicGUI):
         self.setLayout(self.grid)
 
     def msg_box_gui(self):
+        """
+        Creates a msg box prompting whether to shut down the app
+        """
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Question)
         msg_box.setWindowTitle("Shutdown Entomology GUI")
@@ -94,7 +105,9 @@ class ShutdownGuiGUI(basicGUI):
         msg_box.exec_()
 
     def shutdown_gui(self, button):
-
+        """
+        Shutting down the app by getting the process id and then killing it
+        """
         if button.text() == "&Yes":
             # Get the PID of the current process
             pid = os.getpid()

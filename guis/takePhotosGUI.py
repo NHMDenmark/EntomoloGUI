@@ -46,8 +46,7 @@ class takePhotosGUI(basicGUI):
         self.takePhotosButton.clicked.connect(self.takePhotos)
         self.takePhotosButton.setStyleSheet("background-color: #caffbf;")
         self.takePhotosButton.setFixedSize(90, 30)
-        # self.takePhotosButton.setStyleSheet("background-color: #caffbf; border-radius: 25px;")
-        
+                
         self.grid.addWidget(self.takePhotosButton, 0, 0, 10, 10)
         
         self.setLayout(self.grid)
@@ -80,7 +79,7 @@ class takePhotosGUI(basicGUI):
 
     def takePhotos(self):
         """takePhotos
-        Tell all 7 cameras to take a photo, and wait for all the responses
+        Tell chosen cameras to take a photo, and wait for all the responses
         """
         self.log.info("Got Command to Take Photos")
         self.start_time = pd.Timestamp.now()

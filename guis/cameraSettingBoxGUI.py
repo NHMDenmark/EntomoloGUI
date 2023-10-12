@@ -5,7 +5,9 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import * 
 
 class SettingCameraDisplayBox(basicGUI):
-
+        """
+        Controls and updates ui for showing which cameras are included in current settings. 
+        """
         def __init__(self, **kwargs):
             super(SettingCameraDisplayBox, self).__init__(**kwargs)
             
@@ -66,7 +68,9 @@ class SettingCameraDisplayBox(basicGUI):
 
 
         def updateBox(self, colorStatus, cameraName):
-
+            """
+            Updates camera boxes with different colors depending on which setting has been chosen.      
+            """
                
             if colorStatus == False:
                 getattr(SettingCameraDisplayBox, cameraName).setStyleSheet(f"border: 2px solid #b8e0d4; background-color: #b8e0d4; border-radius: 1px;")
