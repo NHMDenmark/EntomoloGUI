@@ -14,6 +14,8 @@ from utils import make_x_image
 
 class canonGUI(basicGUI):
     """
+    http://www.gphoto.org/doc/manual/ref-gphoto2-cli.html#cli-examples
+
     The GUI for each Canon camera. Contains most of the code for accessing the
       camera, taking photos, etc.
     """
@@ -182,7 +184,7 @@ class canonGUI(basicGUI):
             # set said camera instance to have the abilities of the model we are interested in
             idx = abilities_list.lookup_model(model)
             cam.set_abilities(abilities_list[idx])
-
+            
             # try initializing the camera in question
             OK = gp.gp_camera_init(cam)
             if OK >= gp.GP_OK:
@@ -243,7 +245,7 @@ class canonGUI(basicGUI):
 
             # We want to capture raw format images
             self.setImageFormatRAW()
-
+            
             # capture a photo and return the filepath on the camera
             file_path = self.controller.capture(gp.GP_CAPTURE_IMAGE)
 

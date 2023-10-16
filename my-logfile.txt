@@ -1,0 +1,114 @@
+0.000007 main                        (2): ALWAYS INCLUDE THE FOLLOWING LINES WHEN SENDING DEBUG MESSAGES TO THE MAILING LIST:
+0.000090 main                        (2): gphoto2 2.5.28
+0.000101 main                        (2): gphoto2 has been compiled with the following options:
+0.000106 main                        (2):  + clang (C compiler used)
+0.000111 main                        (2):  + popt (mandatory, for handling command-line parameters)
+0.000117 main                        (2):  + exif (for displaying EXIF information)
+0.000122 main                        (2):  + no cdk (for accessing configuration options)
+0.000127 main                        (2):  + no aa (for displaying live previews)
+0.000131 main                        (2):  + jpeg (for displaying live previews in JPEG format)
+0.000136 main                        (2):  + readline (for easy navigation in the shell)
+0.000143 main                        (2): libgphoto2 2.5.30
+0.000148 main                        (2): libgphoto2 has been compiled with the following options:
+0.000153 main                        (2):  + standard camlib set (ax203 canon digigr8 dimagev directory docupen jl2005a jl2005c kodak_dc240 lumix mars pentax ptp2 ricoh_g3 sierra sonix sq905 st2205 topfield tp6801)
+0.000157 main                        (2):  + clang (C compiler used)
+0.000162 main                        (2):  + no ltdl (for portable loading of camlibs)
+0.000166 main                        (2):  + EXIF (for special handling of EXIF files)
+0.000171 main                        (2): libgphoto2_port 0.12.1
+0.000176 main                        (2): libgphoto2_port has been compiled with the following options:
+0.000180 main                        (2):  + iolibs: disk ptpip serial usb1
+0.000184 main                        (2):  + clang (C compiler used)
+0.000188 main                        (2):  + no ltdl (for portable loading of iolibs)
+0.000193 main                        (2):  + EXIF (for vusb)
+0.000197 main                        (2):  + USB (libusb1, for USB cameras)
+0.000201 main                        (2):  + serial (for serial cameras)
+0.000205 main                        (2):  + no resmgr (serial port access and locking)
+0.000209 main                        (2):  + no ttylock (serial port locking)
+0.000213 main                        (2):  + no lockdev (serial port locking)
+0.000218 main                        (2): CAMLIBS env var not set, using compile-time default instead
+0.000222 main                        (2): IOLIBS env var not set, using compile-time default instead
+0.000226 main                        (2): invoked with following arguments:
+0.000230 main                        (2):   --debug
+0.000234 main                        (2):   --debug-logfile=my-logfile.txt
+0.000238 main                        (2):   --list-all-config
+0.000250 load_settings               (2): Creating gphoto config directory ('/Users/dassco/.gphoto')
+0.000287 load_settings               (2): Loading settings from file '/Users/dassco/.gphoto/settings'.
+0.000411 gp_camera_init              (2): Initializing camera...
+0.000419 gp_camera_init              (2): Neither port nor model set. Trying auto-detection...
+0.000425 gp_port_init_localedir      (2): localedir has been set to /opt/homebrew/Cellar/libgphoto2/2.5.30_1/share/locale (compile-time default)
+0.000430 gp_init_localedir           (2): localedir has been set to /opt/homebrew/Cellar/libgphoto2/2.5.30_1/share/locale (compile-time default)
+0.000440 gp_abilities_list_load_dir  (2): Using ltdl to load camera libraries from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30'...
+0.000574 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/ax203'.
+0.000580 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/canon'.
+0.000584 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/digigr8'.
+0.000589 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/dimagev'.
+0.000602 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/directory'.
+0.000605 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/docupen'.
+0.000608 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/jl2005a'.
+0.000611 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/jl2005c'.
+0.000614 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/kodak_dc240'.
+0.000617 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/lumix'.
+0.000620 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/mars'.
+0.000637 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/pentax'.
+0.000640 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/ptp2'.
+0.000643 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/ricoh_g3'.
+0.000646 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/sierra'.
+0.000649 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/sonix'.
+0.000651 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/sq905'.
+0.000654 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/st2205'.
+0.000657 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/topfield'.
+0.000660 foreach_func                (2): Found '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2/2.5.30/tp6801'.
+0.000666 gp_abilities_list_load_dir  (2): Found 20 camera drivers.
+0.026399 gp_port_init_localedir      (2): ignoring late call (localedir value NULL)
+0.026421 gp_port_info_list_load      (2): Using ltdl to load io-drivers from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1'...
+0.026472 foreach_func                (2): Called for filename '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/disk'.
+0.026711 foreach_func                (2): Loaded '' ('^disk:') from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/disk'.
+0.026717 foreach_func                (2): Called for filename '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/ptpip'.
+0.026930 foreach_func                (2): Loaded 'PTP/IP Connection' ('ptpip:') from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/ptpip'.
+0.026934 foreach_func                (2): Loaded '' ('^ptpip:') from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/ptpip'.
+0.026937 foreach_func                (2): Loaded 'IP Connection' ('ip:') from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/ptpip'.
+0.026940 foreach_func                (2): Loaded '' ('^ip:') from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/ptpip'.
+0.026942 foreach_func                (2): Called for filename '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/serial'.
+0.029107 foreach_func                (2): Loaded 'Serial Port Device' ('serial:') from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/serial'.
+0.029111 foreach_func                (2): Loaded '' ('^serial:') from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/serial'.
+0.029114 foreach_func                (2): Called for filename '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/usb1'.
+0.032522 foreach_func                (2): Loaded '' ('^usb:') from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/usb1'.
+0.032531 foreach_func                (2): Loaded 'Universal Serial Bus' ('usb:') from '/opt/homebrew/Cellar/libgphoto2/2.5.30_1/lib/libgphoto2_port/0.12.1/usb1'.
+0.032546 gp_port_info_list_count     (2): Counting entries (9 available)...
+0.032548 gp_port_info_list_count     (2): 4 regular entries available.
+0.032551 gp_port_new                 (2): Creating new device...
+0.032554 gp_port_info_list_get_info  (2): Getting info of entry 0 (9 available)...
+0.032749 gp_port_set_settings        (2): Setting settings...
+0.032754 gp_port_info_list_get_info  (2): Getting info of entry 1 (9 available)...
+0.032963 gp_port_set_settings        (2): Setting settings...
+0.032967 gp_port_info_list_get_info  (2): Getting info of entry 2 (9 available)...
+0.033242 gp_port_set_timeout         (2): Setting port timeout to 500 milliseconds.
+0.033245 gp_port_set_settings        (2): Setting settings...
+0.033247 gp_port_info_list_get_info  (2): Getting info of entry 3 (9 available)...
+0.034503 gp_port_set_timeout         (2): Setting port timeout to 5000 milliseconds.
+0.034510 gp_port_set_settings        (2): Setting settings...
+0.034514 gp_libusb1_update           (2): (old int=0, conf=-1, alt=-1) port usb:, (new int=0, conf=-1, alt=-1) port usb:
+0.034516 gp_libusb1_update           (2): lowlevel libusb1 port not yet opened, no need for libusb changes
+0.034518 gp_abilities_list_detect_usb(2): Auto-detecting USB cameras...
+0.034607 gp_libusb1_find_device_by_class_lib(2): Looking for USB device (class 0x29a, subclass, 0xffffffff, protocol 0xffffffff)...
+0.034610 gp_libusb1_find_device_by_class_lib(2): Looking for USB device (class 0x29a, subclass, 0xffffffff, protocol 0xffffffff)...
+0.034612 gp_libusb1_find_device_by_class_lib(2): Looking for USB device (class 0x29a, subclass, 0xffffffff, protocol 0xffffffff)...
+0.034614 gp_libusb1_find_device_by_class_lib(2): Looking for USB device (class 0x29a, subclass, 0xffffffff, protocol 0xffffffff)...
+0.034685 gp_libusb1_find_device_by_class_lib(2): Looking for USB device (class 0x6, subclass, 0x1, protocol 0x1)...
+0.034689 gp_libusb1_find_device_by_class_lib(2): Looking for USB device (class 0x6, subclass, 0x1, protocol 0x1)...
+0.034691 gp_libusb1_find_device_by_class_lib(2): Looking for USB device (class 0x6, subclass, 0x1, protocol 0x1)...
+0.034694 gp_libusb1_find_device_by_class_lib(2): Looking for USB device (class 0x6, subclass, 0x1, protocol 0x1)...
+0.034700 gp_port_free                (2): Freeing port...
+0.034702 gp_port_close               (2): Closing port...
+0.035011 gp_context_error            (0): Could not detect any camera
+0.035024 gp_context_error            (0): An error occurred in the io-library ('Unknown error'): No error description available
+0.035033 gp_camera_free              (2): Freeing camera...
+0.035035 gp_port_free                (2): Freeing port...
+0.035038 gp_filesystem_reset         (2): resetting filesystem
+0.035040 gp_filesystem_lru_clear     (2): Clearing fscache LRU list...
+0.035042 gp_filesystem_lru_clear     (2): fscache LRU list already empty
+0.035045 delete_all_folders          (2): Internally deleting all folders from '/'...
+0.035048 lookup_folder               (2): Lookup folder '/'...
+0.035051 lookup_folder               (2): Found! / is 0x6000032a46f0
+0.035053 recurse_delete_folder       (2): Recurse delete folder 0x6000032a46f0//
+0.035055 delete_all_files            (2): Delete all files in folder 0x6000032a46f0//
