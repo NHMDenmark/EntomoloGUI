@@ -11,7 +11,6 @@ from guis.workers import previewWorker
 from guis.basicGUI import basicGUI, ClickableIMG
 from utils import make_x_image
 
-
 class canonGUI(basicGUI):
     """
     http://www.gphoto.org/doc/manual/ref-gphoto2-cli.html#cli-examples
