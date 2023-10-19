@@ -5,3 +5,4 @@ log.log
 __pycache__
 save_photo_timings.csv
 take_photo_timings.csv
+utils.cpython-310.pyc
