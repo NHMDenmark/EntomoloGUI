@@ -20,7 +20,7 @@ class WorkerSignals(QObject):
 
     result
         object data returned from processing, anything
-
+    hi
     progress
         int indicating % progress
 
