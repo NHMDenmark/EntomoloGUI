@@ -24,6 +24,7 @@ class canonsGUI(basicGUI):
         self.topCanonGUI = canonGUI("Top", **kwargs)
         self.sideCanonGUI = canonGUI("Side", **kwargs)
         self.dassco0218GUI = canonGUI("dassco0218", **kwargs)
+        self.dassco0024GUI = canonGUI("dassco0024", **kwargs)
 
         self.reinitCamerasButton = QtWidgets.QPushButton(
             "Reinitialize Canon Cameras"
@@ -39,7 +40,8 @@ class canonsGUI(basicGUI):
         self.setLayout(self.grid)  
         self.grid.addWidget(self.topCanonGUI, 1, 1, 1, 6)
         self.grid.addWidget(self.sideCanonGUI, 1, 12, 1, 6)
-        self.grid.addWidget(self.dassco0218GUI, 1, 18, 1, 6)
+        self.grid.addWidget(self.dassco0218GUI, 2, 1, 1, 6)
+        self.grid.addWidget(self.dassco0024GUI, 2, 12, 1, 6)
         self.setLayout(self.grid)
 
     def getCameras(self):
@@ -51,7 +53,7 @@ class canonsGUI(basicGUI):
                 camera classes. One for the top camera, and one for the
                 side camera
         """
-        cameras = [self.topCanonGUI, self.sideCanonGUI, self.dassco0218GUI]
+        cameras = [self.topCanonGUI, self.sideCanonGUI, self.dassco0218GUI, self.dassco0024GUI]
         return cameras
 
     def reinitCameras(self):
@@ -62,3 +64,4 @@ class canonsGUI(basicGUI):
         self.topCanonGUI.reinitCamera()
         self.sideCanonGUI.reinitCamera()
         self.dassco0218GUI.reinitCamera()
+        self.dassco0024GUI.reinitCamera()

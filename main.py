@@ -80,21 +80,22 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         """
         self.setWindowTitle("EntomoloGUI")
         self.setWindowIcon(QtGui.QIcon("EntomoloGUI/media/icon.png"))
-        self.setStyleSheet("background-color: #ffffea;")
+        self.setStyleSheet("background-color: #bbbfff;") # was #ffffea
+        
 
         # specify the locations and size for each component (widget, row, column, row span, column span)
         self.grid.addWidget(self.piEyedPiper, 0, 0, 20, 6)
-        self.grid.addWidget(self.canons, 21, 0, 50, 6)
+        self.grid.addWidget(self.canons, 21, 0, 40, 6)
         self.grid.addWidget(self.takePhotos, 64, 6, 10, 1)
-        self.grid.addWidget(self.shutdownPisButton, 64, 0, 10, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.shutdownGuiButton, 64, 1, 10, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.chooseCamerasbutton, 64, 3, 10, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.dropdownMenuCameras, 64, 4, 10, 5, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.pieyeActiveBox, 50, 6, 20, 1)
+        self.grid.addWidget(self.shutdownPisButton, 62, 0, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.shutdownGuiButton, 62, 1, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.chooseCamerasbutton, 62, 3, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.dropdownMenuCameras, 62, 4, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.pieyeActiveBox, 21, 6, 20, 1)
 
 
         self.setLayout(self.grid)
-        
+
         self.show()
 
         topLeftPoint = QtWidgets.QApplication.desktop().availableGeometry().topLeft()

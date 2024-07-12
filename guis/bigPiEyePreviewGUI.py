@@ -91,7 +91,7 @@ class bigPiEyePreviewGUI(basicGUI):
         self.setWindowTitle(camera_name)
 
         # If for some reason cannot connect to the camera, show an image of an X instead
-        self.x = make_x_image(width=320, height=240)
+        self.x = make_x_image(width=360, height=240)
 
         self.img = QtWidgets.QLabel(self)
         self.img.setMaximumSize(4056, 3040)

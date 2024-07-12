@@ -333,7 +333,7 @@ class JsonCameraSetting(basicGUI):
             self.scdb.updateBox(colorStatus=setting, cameraName=cam)
 
         for cam in self.scdb.canons:
-            print(cam)
+            #print(cam)
             setting = self.currentSetting[cam]
             
             self.scdb.updateBox(colorStatus=setting, cameraName=cam)

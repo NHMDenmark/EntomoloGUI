@@ -37,7 +37,7 @@ class canonGUI(basicGUI):
         self.preview_paused = False
 
         # if the camera cannot provide a preview, or the camera cannot be found, display an x instead
-        self.x = make_x_image(640, 420)
+        self.x = make_x_image(200, 80) # was 640, 420
 
         self.initUI()
 
@@ -73,13 +73,17 @@ class canonGUI(basicGUI):
         initializes the UI for the canon camera
         """
         self.title = QtWidgets.QLabel(f"{self.camera_name} Canon Preview:")
-
+        
         self.preview = ClickableIMG(self)
-        self.preview.setMaximumSize(640, 420)
+        self.preview.setMaximumSize(400, 170) # was 640, 420
         self.preview.clicked.connect(self.openIMG)
 
-        self.grid.addWidget(self.title, 0, 0, 1, 2)
-        self.grid.addWidget(self.preview, 2, 0, 1, 8)
+        self.grid.addWidget(self.title, 0, 0, 1, 8)
+        self.grid.addWidget(self.preview, 1, 0, 1, 8)
+
+        # Set the row stretch factors
+        #self.grid.setRowStretch(0, 1)  # Title row takes up 1/10th
+        #self.grid.setRowStretch(1, 139)  # Preview row takes up 9/10ths
 
         self.setLayout(self.grid)
 
@@ -136,7 +140,7 @@ class canonGUI(basicGUI):
         # update the GUI image
         pixmap01 = QtGui.QPixmap.fromImage(img)
         preview_img = QtGui.QPixmap(pixmap01)
-        preview_img = preview_img.scaled(640, 420, QtCore.Qt.KeepAspectRatio)
+        preview_img = preview_img.scaled(320, 210, QtCore.Qt.KeepAspectRatio) # was 640, 420
         self.preview.setPixmap(preview_img)
 
     def openIMG(self):
@@ -161,13 +165,14 @@ class canonGUI(basicGUI):
         cameras = gp.Camera.autodetect()
 
         # filter this list by those that are the correct model
-        canons = [x for x in cameras if x[0] == "Canon EOS R5"]
+        canons = [x for x in cameras if x[0] == "Canon EOS R5" or x[0] == "Canon EOS 5D Mark IV"]
         print(len(canons), owner)
+        for cam in canons:
+            print(cam[1])
         # loop over each canon camera and look for the one with the correct 'Owner'/'Location' ('Top' or 'Side')
         for cam_data in canons:
             model, port = cam_data
-            print(model, port)
-
+            
             # load all the ports
             port_info_list = gp.PortInfoList()
             port_info_list.load()
@@ -196,7 +201,7 @@ class canonGUI(basicGUI):
                 if cam_owner.strip() == owner:
                     # if it is in the correct owner, return the controller instance
                     self.port = port
-                    print(f"Connected with: {owner}")
+                    print(f"Connected with: {owner} : {port}")
                     return cam
                 else:
                     # otherwise try to nicely exit the controller
@@ -374,4 +379,5 @@ class canonGUI(basicGUI):
                 return image
             except Exception as ex:
                 self.log.info("Exception encountered:" + str(ex))
+                sleep(1)
                 return None
