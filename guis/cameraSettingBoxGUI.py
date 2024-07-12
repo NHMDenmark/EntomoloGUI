@@ -17,7 +17,7 @@ class SettingCameraDisplayBox(basicGUI):
 
             setattr(SettingCameraDisplayBox, "cameras", ["pieye-ant.local", "pieye-beetle.local", "pieye-cicada.local", "pieye-dragonfly.local", "pieye-earwig.local"])
 
-            setattr(SettingCameraDisplayBox, "canons", ["Top", "Side"])
+            setattr(SettingCameraDisplayBox, "canons", ["Top", "Side", "dassco0218"])
 
             self.initUI()
 

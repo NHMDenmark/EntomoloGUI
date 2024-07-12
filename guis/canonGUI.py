@@ -43,6 +43,7 @@ class canonGUI(basicGUI):
 
         # start the preview worker thread
         self.startPreviewWorker()
+        
 
     def set_pause_preview(self, val):
         """set_pause_preview
@@ -87,6 +88,7 @@ class canonGUI(basicGUI):
         Attempts to reinitialize the camera. This is necessary in case something goes wrong with the connection
         For example, if a camera is unplugged.
         """
+        
         if self.controller is not None:
             self.pause_preview = True
             print('Shutting Down ADDRESS:',self.camera_name)
@@ -160,10 +162,11 @@ class canonGUI(basicGUI):
 
         # filter this list by those that are the correct model
         canons = [x for x in cameras if x[0] == "Canon EOS R5"]
-
+        print(len(canons), owner)
         # loop over each canon camera and look for the one with the correct 'Owner'/'Location' ('Top' or 'Side')
         for cam_data in canons:
             model, port = cam_data
+            print(model, port)
 
             # load all the ports
             port_info_list = gp.PortInfoList()
@@ -193,12 +196,14 @@ class canonGUI(basicGUI):
                 if cam_owner.strip() == owner:
                     # if it is in the correct owner, return the controller instance
                     self.port = port
+                    print(f"Connected with: {owner}")
                     return cam
                 else:
                     # otherwise try to nicely exit the controller
                     gp.check_result(gp.gp_camera_exit(cam))
 
         # return None if no cameras were found
+        print(f"Failed to connect the camera: {owner}")
         return None
 
     def getOwner(self, camera):

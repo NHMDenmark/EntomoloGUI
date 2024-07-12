@@ -101,6 +101,7 @@ class CameraSetupGUI(basicGUI):
         self.dialogLayoutCreate.addWidget(self.checkTop)
         self.checkSide = QCheckBox("Canon Side")
         self.dialogLayoutCreate.addWidget(self.checkSide)
+        
 
         self.inputName = QLineEdit()
         self.inputName.setPlaceholderText("Choose a name for the new setting")
@@ -332,6 +333,7 @@ class JsonCameraSetting(basicGUI):
             self.scdb.updateBox(colorStatus=setting, cameraName=cam)
 
         for cam in self.scdb.canons:
+            print(cam)
             setting = self.currentSetting[cam]
             
             self.scdb.updateBox(colorStatus=setting, cameraName=cam)
