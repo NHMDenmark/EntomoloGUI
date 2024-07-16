@@ -44,7 +44,7 @@ class basicGUI(QtWidgets.QWidget):
             headerLabel: the header label object
         """
         headerLabel = QtWidgets.QLabel(text)
-        headerFont = QtGui.QFont("Times", 20, QtGui.QFont.Bold)
+        headerFont = QtGui.QFont("Times", 10, QtGui.QFont.Bold)
         headerLabel.setFont(headerFont)
         return headerLabel
 

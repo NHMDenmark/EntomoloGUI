@@ -101,7 +101,14 @@ class CameraSetupGUI(basicGUI):
         self.dialogLayoutCreate.addWidget(self.checkTop)
         self.checkSide = QCheckBox("Canon Side")
         self.dialogLayoutCreate.addWidget(self.checkSide)
-        
+        self.checkDassco0218 = QCheckBox("Canon dassco0218")
+        self.dialogLayoutCreate.addWidget(self.checkDassco0218)
+        self.checkDassco0024 = QCheckBox("Canon dassco0024")
+        self.dialogLayoutCreate.addWidget(self.checkDassco0024)
+        self.checkDassco0056 = QCheckBox("Canon dassco0056")
+        self.dialogLayoutCreate.addWidget(self.checkDassco0056)
+        self.checkDassco0063 = QCheckBox("Canon dassco0063")
+        self.dialogLayoutCreate.addWidget(self.checkDassco0063)
 
         self.inputName = QLineEdit()
         self.inputName.setPlaceholderText("Choose a name for the new setting")
@@ -137,7 +144,11 @@ class CameraSetupGUI(basicGUI):
                 "pieye-dragonfly.local": self.checkDragonfly.isChecked(),
                 "pieye-earwig.local": self.checkEarwig.isChecked(),
                 "Top": self.checkTop.isChecked(),
-                "Side": self.checkSide.isChecked()
+                "Side": self.checkSide.isChecked(),
+                "dassco0218": self.checkDassco0218.isChecked(),
+                "dassco0024": self.checkDassco0024.isChecked(),
+                "dassco0056": self.checkDassco0056.isChecked(),
+                "dassco0063": self.checkDassco0063.isChecked()
                 }
                 }
             # adds setting to existing settings

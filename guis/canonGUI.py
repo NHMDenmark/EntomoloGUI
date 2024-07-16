@@ -166,9 +166,9 @@ class canonGUI(basicGUI):
 
         # filter this list by those that are the correct model
         canons = [x for x in cameras if x[0] == "Canon EOS R5" or x[0] == "Canon EOS 5D Mark IV"]
-        print(len(canons), owner)
+        print(f"Found {len(canons)} cameras")
         for cam in canons:
-            print(cam[1])
+            print(owner, cam[0], cam[1])
         # loop over each canon camera and look for the one with the correct 'Owner'/'Location' ('Top' or 'Side')
         for cam_data in canons:
             model, port = cam_data
@@ -191,7 +191,11 @@ class canonGUI(basicGUI):
             # set said camera instance to have the abilities of the model we are interested in
             idx = abilities_list.lookup_model(model)
             cam.set_abilities(abilities_list[idx])
-            
+            """
+            if model is not "Canon EOS R5":
+                for ability in abilities_list:
+                    print(ability)
+            """
             # try initializing the camera in question
             OK = gp.gp_camera_init(cam)
             if OK >= gp.GP_OK:
@@ -282,7 +286,10 @@ class canonGUI(basicGUI):
             return None
         else:
             # get full target path with filename
-            target = local_folder / (self.camera_name + ".cr3")
+            if self.camera_name in ["Top", "Side", "dassco0218", "dassco0063"]:
+                target = local_folder / (self.camera_name + ".cr3")
+            if self.camera_name in ["dassco0024", "dassco0056"]:
+                target = local_folder / (self.camera_name + ".cr2")
             self.set_pause_preview(True)
             # get the camera file location from the camera
             camera_file = self.controller.file_get(
@@ -309,7 +316,10 @@ class canonGUI(basicGUI):
         """
         # 21 is RAW
         # Check options with 'gphoto2 --get-config /main/imgsettings/imageformat'
-        self.setConfig("imageformat", 21)
+        if self.camera_name in ["Top", "Side", "dassco0218", "dassco0063"]:
+            self.setConfig("imageformat", 21)
+        if self.camera_name in ["dassco0024", "dassco0056"]:
+            self.setConfig("imageformat", 32)
 
     def setConfig(self, name, value):
         """setConfig
