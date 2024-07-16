@@ -261,7 +261,7 @@ class canonGUI(basicGUI):
             
             # capture a photo and return the filepath on the camera
             file_path = self.controller.capture(gp.GP_CAPTURE_IMAGE)
-
+            
             # the preview cannot preview if the camera is set to raw format
             self.setImageFormatJPEG()
 
@@ -282,6 +282,7 @@ class canonGUI(basicGUI):
         Returns:
             True or None: True if successful, None if the controller is None
         """
+        print(camera_path, local_folder)
         if self.controller is None:
             return None
         else:
