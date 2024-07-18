@@ -46,8 +46,14 @@ class takePhotosGUI(basicGUI):
         self.takePhotosButton.clicked.connect(self.takePhotos)
         self.takePhotosButton.setStyleSheet("background-color: #caffbf;")
         self.takePhotosButton.setFixedSize(90, 30)
-                
+        
+        self.emulateDigitiserButton = QtWidgets.QPushButton("Emulate digitiser 3 hours")
+        self.emulateDigitiserButton.clicked.connect(self.emulate)
+        self.emulateDigitiserButton.setStyleSheet("background-color: #000fff;")
+        self.emulateDigitiserButton.setFixedSize(90, 30)
+
         self.grid.addWidget(self.takePhotosButton, 0, 0, 10, 10)
+        self.grid.addWidget(self.emulateDigitiserButton, 12, 0, 10, 10)
         
         self.setLayout(self.grid)
 
@@ -60,6 +66,19 @@ class takePhotosGUI(basicGUI):
         """
         finished = np.array(list(self.finished.values()))
         return finished.all()
+
+    def emulate(self):
+        time = 0
+        while time < 12:
+            time += 1
+            sleep(25)
+            if time%10:
+                print(f"took images {time} times")
+            try:
+                self.takePhotos()
+            except Exception as e:
+                print(f"failed to emulate digitiser: {e}")
+                break
 
     def setStatusFinished(self, camera_and_result):
         """setStatusFinished
@@ -156,7 +175,7 @@ class takePhotosGUI(basicGUI):
             self.timing['total'] = end_time - self.start_time
             self.take_photos_timings += [self.timing]
             pd.DataFrame(self.take_photos_timings).to_csv('take_photo_timings.csv')
-            self.sounds["Success"].play()
+            # self.sounds["Success"].play()
             self.progress.update(
                 100,
                 f"All photos successfully taken.. Saving photos",
@@ -164,7 +183,7 @@ class takePhotosGUI(basicGUI):
             self.savePhotos(self.results)
         else:
             # play 'Failure' sound
-            self.sounds["Failure"].play()
+            # self.sounds["Failure"].play()
             # get names of cameras that failed
             failed_names = [k for k, v in self.results.items() if v == None]
             self.warn(

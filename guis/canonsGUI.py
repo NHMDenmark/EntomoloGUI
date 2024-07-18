@@ -27,6 +27,7 @@ class canonsGUI(basicGUI):
         self.dassco0024GUI = canonGUI("dassco0024", **kwargs)
         self.dassco0056GUI = canonGUI("dassco0056", **kwargs)
         self.dassco0063GUI = canonGUI("dassco0063", **kwargs)
+        self.dassco0215GUI = canonGUI("dassco0215", **kwargs)
 
         self.reinitCamerasButton = QtWidgets.QPushButton(
             "Reinitialize Canons"
@@ -70,21 +71,33 @@ class canonsGUI(basicGUI):
         self.reinit63CameraButton.clicked.connect(self.reinit63Camera)
         self.reinit63CameraButton.setStyleSheet("background-color: #d6e6ff;")
 
+        self.reinit215CameraButton = QtWidgets.QPushButton(
+            "215"
+        )
+        self.reinit215CameraButton.clicked.connect(self.reinit215Camera)
+        self.reinit215CameraButton.setStyleSheet("background-color: #d6e6ff;")
 
         self.initUI()
 
     def initUI(self):
         #self.grid.addWidget(self.inst_title, 0, 1, 1, 1)
 
-        self.grid.addWidget(self.reinitCamerasButton, 0, 0, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.reinitCamerasButton, 0, 1, 1, 1, alignment=QtCore.Qt.AlignLeft)
         self.grid.addWidget(self.reinitTopCameraButton, 0, 2, 1, 1, alignment=QtCore.Qt.AlignLeft)
         self.grid.addWidget(self.reinitSideCameraButton, 0, 3, 1, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.reinit218CameraButton, 0, 4, 1, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.reinit24CameraButton, 0, 5, 1, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.reinit56CameraButton, 0, 6, 1, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.reinit63CameraButton, 0, 1, 1, 1, alignment=QtCore.Qt.AlignLeft)
-        for i in range(7):
-            self.grid.setColumnMinimumWidth(i, 70)
+        self.grid.addWidget(self.reinit218CameraButton, 0, 12, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.reinit24CameraButton, 0, 13, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.reinit56CameraButton, 0, 14, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.reinit63CameraButton, 0, 15, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.reinit215CameraButton, 0, 16, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        
+        for i in range(16):
+            
+            if i == 1:
+                self.grid.setColumnMinimumWidth(i, 150)
+            if i in [2, 3, 4, 12, 13, 14, 15]:
+                self.grid.setColumnMinimumWidth(i, 70)
+        
 
         self.setLayout(self.grid)  
         self.grid.addWidget(self.topCanonGUI, 1, 1, 1, 6)
@@ -93,6 +106,7 @@ class canonsGUI(basicGUI):
         self.grid.addWidget(self.dassco0218GUI, 2, 1, 1, 6)
         self.grid.addWidget(self.dassco0024GUI, 2, 12, 1, 6)
         self.grid.addWidget(self.dassco0056GUI, 2, 23, 1, 6)
+        self.grid.addWidget(self.dassco0215GUI, 2, 34, 1, 6)
         self.setLayout(self.grid)
 
     def getCameras(self):
@@ -104,7 +118,7 @@ class canonsGUI(basicGUI):
                 camera classes. One for the top camera, and one for the
                 side camera
         """
-        cameras = [self.topCanonGUI, self.sideCanonGUI, self.dassco0218GUI, self.dassco0024GUI, self.dassco0056GUI, self.dassco0063GUI]
+        cameras = [self.topCanonGUI, self.sideCanonGUI, self.dassco0218GUI, self.dassco0024GUI, self.dassco0056GUI, self.dassco0063GUI, self.dassco0215GUI]
         return cameras
 
     def reinitCameras(self):
@@ -118,6 +132,7 @@ class canonsGUI(basicGUI):
         self.dassco0024GUI.reinitCamera()
         self.dassco0056GUI.reinitCamera()
         self.dassco0063GUI.reinitCamera()
+        self.dassco0215GUI.reinitCamera()
 
     def reinitTopCamera(self):
         self.topCanonGUI.reinitCamera()
@@ -136,3 +151,6 @@ class canonsGUI(basicGUI):
 
     def reinit63Camera(self):
         self.dassco0063GUI.reinitCamera()
+
+    def reinit215Camera(self):
+        self.dassco0215GUI.reinitCamera()

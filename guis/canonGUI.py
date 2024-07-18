@@ -168,7 +168,7 @@ class canonGUI(basicGUI):
         canons = [x for x in cameras if x[0] == "Canon EOS R5" or x[0] == "Canon EOS 5D Mark IV"]
         print(f"Found {len(canons)} cameras")
         for cam in canons:
-            print(owner, cam[0], cam[1])
+            print(cam[0], cam[1])
         # loop over each canon camera and look for the one with the correct 'Owner'/'Location' ('Top' or 'Side')
         for cam_data in canons:
             model, port = cam_data
@@ -258,13 +258,17 @@ class canonGUI(basicGUI):
 
             # We want to capture raw format images
             self.setImageFormatRAW()
-            
+            self.getConfig("imageformat")
             # capture a photo and return the filepath on the camera
-            file_path = self.controller.capture(gp.GP_CAPTURE_IMAGE)
-            
-            # the preview cannot preview if the camera is set to raw format
+            try: 
+                file_path = self.controller.capture(gp.GP_CAPTURE_IMAGE)
+                print(f"yo ho {file_path.name}")
+            except Exception as e:  
+                self.log.exception("Failed to capture photo", exc_info=e)
+                file_path = None
+            # the preview cannot preview if the camera is set to raw format     
             self.setImageFormatJPEG()
-
+            self.getConfig("imageformat")
             # Lock the mutex so other threads cannot access the pause_preview variable
             self.set_pause_preview(False)
 
@@ -282,12 +286,12 @@ class canonGUI(basicGUI):
         Returns:
             True or None: True if successful, None if the controller is None
         """
-        print(camera_path, local_folder)
+        
         if self.controller is None:
             return None
         else:
             # get full target path with filename
-            if self.camera_name in ["Top", "Side", "dassco0218", "dassco0063"]:
+            if self.camera_name in ["Top", "Side", "dassco0218", "dassco0063", "dassco0215"]:
                 target = local_folder / (self.camera_name + ".cr3")
             if self.camera_name in ["dassco0024", "dassco0056"]:
                 target = local_folder / (self.camera_name + ".cr2")
@@ -317,10 +321,11 @@ class canonGUI(basicGUI):
         """
         # 21 is RAW
         # Check options with 'gphoto2 --get-config /main/imgsettings/imageformat'
-        if self.camera_name in ["Top", "Side", "dassco0218", "dassco0063"]:
+        if self.camera_name in ["Top", "Side", "dassco0218", "dassco0063", "dassco0215"]:
             self.setConfig("imageformat", 21)
         if self.camera_name in ["dassco0024", "dassco0056"]:
             self.setConfig("imageformat", 32)
+            
 
     def setConfig(self, name, value):
         """setConfig
@@ -337,6 +342,28 @@ class canonGUI(basicGUI):
             value = gp.check_result(gp.gp_widget_get_choice(config_item, value))
             gp.check_result(gp.gp_widget_set_value(config_item, value))
             gp.check_result(gp.gp_camera_set_config(self.controller, config))
+
+    def getConfig(self, name):
+        """getConfig
+    Get the current value of the camera configuration with name 'name'
+
+    Args:
+        name (string): name of the configuration to be retrieved. Eg, imageformat
+
+    Returns:
+        value: the current value of the configuration
+    """
+        if self.controller is not None:
+            config = gp.check_result(gp.gp_camera_get_config(self.controller))
+            config_item = gp.check_result(gp.gp_widget_get_child_by_name(config, name))
+        
+        # Get the current value of the configuration item
+            value = gp.check_result(gp.gp_widget_get_value(config_item))
+            print(f"got value: {value}")
+            return value
+        return None
+            
+            
 
     def getPreview(self):
         """getPreview
