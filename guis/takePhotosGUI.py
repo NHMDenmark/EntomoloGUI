@@ -69,13 +69,14 @@ class takePhotosGUI(basicGUI):
 
     def emulate(self):
         time = 0
-        while time < 12:
+        while time < 60:
             time += 1
-            sleep(25)
-            if time%10:
-                print(f"took images {time} times")
+            sleep(30)
+            
             try:
                 self.takePhotos()
+                if time%10 == 0:
+                    print(f"took images {time} times")
             except Exception as e:
                 print(f"failed to emulate digitiser: {e}")
                 break
