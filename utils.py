@@ -37,7 +37,7 @@ def init_logger(debug):
     consoleHandler = logging.StreamHandler()
     consoleHandler.setFormatter(logFormatter)
     logger.addHandler(consoleHandler)
-
+    
     return logger
 
 
