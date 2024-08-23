@@ -47,7 +47,7 @@ class takePhotosGUI(basicGUI):
         self.takePhotosButton.setStyleSheet("background-color: #caffbf;")
         self.takePhotosButton.setFixedSize(90, 30)
         
-        self.emulateDigitiserButton = QtWidgets.QPushButton("Emulate digitiser 3 hours")
+        self.emulateDigitiserButton = QtWidgets.QPushButton("Emulate digitiser 30 min")
         self.emulateDigitiserButton.clicked.connect(self.emulate)
         self.emulateDigitiserButton.setStyleSheet("background-color: #000fff;")
         self.emulateDigitiserButton.setFixedSize(90, 30)
