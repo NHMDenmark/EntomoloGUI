@@ -84,13 +84,13 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
         
 
         # specify the locations and size for each component (widget, row, column, row span, column span)
-        #self.grid.addWidget(self.piEyedPiper, 0, 0, 20, 6)
-        self.grid.addWidget(self.canons, 0, 0, 40, 6) # was 21, 0, 40, 6 with pieyed piper
-        self.grid.addWidget(self.takePhotos, 64, 6, 10, 1)
-        self.grid.addWidget(self.shutdownPisButton, 62, 0, 10, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.shutdownGuiButton, 62, 1, 10, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.chooseCamerasbutton, 62, 3, 10, 1, alignment=QtCore.Qt.AlignLeft)
-        self.grid.addWidget(self.dropdownMenuCameras, 62, 4, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.piEyedPiper, 0, 0, 20, 6)
+        self.grid.addWidget(self.canons, 21, 0, 40, 6)
+        self.grid.addWidget(self.takePhotos, 54, 6, 10, 1)
+        self.grid.addWidget(self.shutdownPisButton, 52, 0, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.shutdownGuiButton, 52, 1, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.chooseCamerasbutton, 52, 3, 10, 1, alignment=QtCore.Qt.AlignLeft)
+        self.grid.addWidget(self.dropdownMenuCameras, 52, 4, 10, 1, alignment=QtCore.Qt.AlignLeft)
         self.grid.addWidget(self.pieyeActiveBox, 21, 6, 20, 1)
 
 
@@ -98,8 +98,8 @@ class entomoloGUI(basicGUI, QtWidgets.QMainWindow):
 
         self.show()
 
-        topLeftPoint = QtWidgets.QApplication.desktop().availableGeometry().topLeft()
-        self.move(topLeftPoint)
+        #topLeftPoint = QtWidgets.QApplication.desktop().availableGeometry().topLeft()
+        #self.move(topLeftPoint)
 
     def update_settings(self):
         self.piEyedPiper.grid.update()

@@ -29,7 +29,7 @@ class basicGUI(QtWidgets.QWidget):
     def __init__(self, threadpool=None):
         super(basicGUI, self).__init__()
         self.grid = QtWidgets.QGridLayout()
-        self.grid.setSpacing(10)
+        self.grid.setSpacing(1)
         self.log = logging.getLogger("UThread")
         self.threadpool = threadpool
 

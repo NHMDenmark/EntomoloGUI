@@ -37,7 +37,7 @@ class canonGUI(basicGUI):
         self.preview_paused = False
 
         # if the camera cannot provide a preview, or the camera cannot be found, display an x instead
-        self.x = make_x_image(200, 80) # was 640, 420
+        self.x = make_x_image(640, 420) # was 640, 420
 
         self.initUI()
 
@@ -75,11 +75,11 @@ class canonGUI(basicGUI):
         self.title = QtWidgets.QLabel(f"{self.camera_name} Canon Preview:")
         
         self.preview = ClickableIMG(self)
-        self.preview.setMaximumSize(400, 170) # was 640, 420
+        self.preview.setMaximumSize(640, 420) # was 640, 420
         self.preview.clicked.connect(self.openIMG)
-
-        self.grid.addWidget(self.title, 0, 0, 1, 8)
-        self.grid.addWidget(self.preview, 1, 0, 1, 8)
+        #(widget, row, column, row span, column span)
+        self.grid.addWidget(self.title, 1, 1, 1, 1)
+        self.grid.addWidget(self.preview, 2, 1, 30, 6)
 
         # Set the row stretch factors
         #self.grid.setRowStretch(0, 1)  # Title row takes up 1/10th
