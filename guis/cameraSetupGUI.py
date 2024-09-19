@@ -111,6 +111,13 @@ class CameraSetupGUI(basicGUI):
         self.dialogLayoutCreate.addWidget(self.checkDassco0063)
         self.checkDassco0215 = QCheckBox("Canon dassco0215")
         self.dialogLayoutCreate.addWidget(self.checkDassco0215)
+        self.checkDassco0041 = QCheckBox("Canon dassco0041")
+        self.dialogLayoutCreate.addWidget(self.checkDassco0041)
+        self.checkDassco0042 = QCheckBox("Canon dassco0042")
+        self.dialogLayoutCreate.addWidget(self.checkDassco0042)
+        self.checkR10 = QCheckBox("Canon R10")
+        self.dialogLayoutCreate.addWidget(self.checkR10)
+
 
         self.inputName = QLineEdit()
         self.inputName.setPlaceholderText("Choose a name for the new setting")
@@ -151,7 +158,10 @@ class CameraSetupGUI(basicGUI):
                 "dassco0024": self.checkDassco0024.isChecked(),
                 "dassco0056": self.checkDassco0056.isChecked(),
                 "dassco0063": self.checkDassco0063.isChecked(),
-                "dassco0215": self.checkDassco0215.isChecked()
+                "dassco0215": self.checkDassco0215.isChecked(),
+                "dassco0042": self.checkDassco0042.isChecked(),
+                "dassco0041": self.checkDassco0041.isChecked(),
+                "R10": self.checkR10.isChecked(),
                 }
                 }
             # adds setting to existing settings

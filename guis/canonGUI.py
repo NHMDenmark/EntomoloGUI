@@ -165,7 +165,7 @@ class canonGUI(basicGUI):
         cameras = gp.Camera.autodetect()
 
         # filter this list by those that are the correct model
-        canons = [x for x in cameras if x[0] == "Canon EOS R5" or x[0] == "Canon EOS 5D Mark IV"]
+        canons = [x for x in cameras if x[0] == "Canon EOS R5" or x[0] == "Canon EOS 5D Mark IV" or x[0] == "USB PTP Class Camera"]
         print(f"Found {len(canons)} cameras")
         for cam in canons:
             print(cam[0], cam[1])
@@ -291,7 +291,8 @@ class canonGUI(basicGUI):
             return None
         else:
             # get full target path with filename
-            if self.camera_name in ["Top", "Side", "dassco0218", "dassco0063", "dassco0215"]:
+            #  filetype for R10
+            if self.camera_name in ["dassco0215", "dassco0042", "dassco0041", "R10"]:
                 target = local_folder / (self.camera_name + ".cr3")
             if self.camera_name in ["dassco0024", "dassco0056"]:
                 target = local_folder / (self.camera_name + ".cr2")
@@ -321,7 +322,7 @@ class canonGUI(basicGUI):
         """
         # 21 is RAW
         # Check options with 'gphoto2 --get-config /main/imgsettings/imageformat'
-        if self.camera_name in ["Top", "Side", "dassco0218", "dassco0063", "dassco0215"]:
+        if self.camera_name in ["dassco0215", "dassco0042", "dassco0041", "R10"]:
             self.setConfig("imageformat", 21)
         if self.camera_name in ["dassco0024", "dassco0056"]:
             self.setConfig("imageformat", 32)
